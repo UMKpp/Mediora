@@ -66,11 +66,17 @@ function FieldIcon({ type }) {
   );
 }
 
-function Feature({ icon, title, subtitle }) {
+function Feature({ iconSrc, iconAlt, title, subtitle }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/75 text-teal-600 shadow-sm">
-        {icon}
+      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/75 shadow-sm">
+        <Image
+          src={iconSrc}
+          alt={iconAlt}
+          width={27}
+          height={27}
+          className="h-7 w-7 object-contain"
+        />
       </span>
       <span className="min-w-0">
         <span className="block text-sm font-semibold leading-5 text-slate-900">
@@ -133,59 +139,20 @@ export default function LoginPage() {
               <Feature
                 title="Trusted"
                 subtitle="Care"
-                icon={
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7" fill="none">
-                    <path
-                      d="M12 3.5 19 6v5.3c0 4.3-2.8 7.6-7 9.2-4.2-1.6-7-4.9-7-9.2V6l7-2.5Z"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="m8.8 12 2 2 4.4-5"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                iconSrc="/images/shield-check.png"
+                iconAlt="Shield check icon"
               />
               <Feature
                 title="Find Doctors"
                 subtitle="Nearby"
-                icon={
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7" fill="none">
-                    <path
-                      d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                    />
-                    <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.8" />
-                  </svg>
-                }
+                iconSrc="/images/map-marker.png"
+                iconAlt="Map marker icon"
               />
               <Feature
                 title="Health"
                 subtitle="Guidance"
-                icon={
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7" fill="none">
-                    <path
-                      d="M3 12h4l2-5 4 10 2-5h6"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M5.4 8.4A4 4 0 0 1 12 5.2a4 4 0 0 1 6.6 3.2c0 4.1-6.6 8.6-6.6 8.6s-2-1.4-3.8-3.2"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                }
+                iconSrc="/images/heart-rate.png"
+                iconAlt="Heart rate icon"
               />
             </div>
           </div>
