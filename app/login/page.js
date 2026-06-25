@@ -110,16 +110,13 @@ export default function LoginPage() {
 
           <div className="relative z-10">
             <Image
-              src="/images/mediora_logo.png"
+              src="/images/mediora_logo_clean.png"
               alt="Mediora"
-              width={270}
-              height={135}
+              width={220}
+              height={159}
               priority
-              className="-ml-14 -mt-8 h-auto w-64"
+              className="h-auto w-40 sm:w-48"
             />
-            <p className="-mt-8 ml-10 text-sm font-medium text-slate-700">
-              Your Health, Our Priority
-            </p>
           </div>
 
           <div className="relative z-10 mt-20 max-w-lg lg:mt-24">
