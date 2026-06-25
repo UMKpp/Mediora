@@ -86,8 +86,8 @@ function Feature({ icon, title, subtitle }) {
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen bg-[#f2fbfa] p-0 text-slate-900 sm:p-4 lg:p-6">
-      <section className="mx-auto grid min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#effbfa] via-white to-[#f7fcff] shadow-2xl shadow-slate-200/80 sm:min-h-[calc(100vh-2rem)] sm:rounded-[2rem] lg:min-h-[calc(100vh-3rem)] lg:max-w-[1520px] lg:grid-cols-[1.08fr_1fr]">
+    <main className="flex min-h-screen items-center justify-center bg-[#f2fbfa] p-4 text-slate-900 sm:p-6 lg:p-12">
+      <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#effbfa] via-white to-[#f7fcff] shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[1.08fr_1fr]">
         <div className="relative flex min-h-[560px] flex-col overflow-hidden px-6 py-7 sm:px-10 lg:min-h-0 lg:px-14 lg:py-12">
           <div className="absolute inset-0 opacity-100">
             <Image
@@ -102,20 +102,18 @@ export default function LoginPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#eefcfb]/78 via-[#eefcfb]/28 to-white/10" />
           <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-gradient-to-l from-white/64 to-transparent lg:block" />
 
-          <div className="relative z-10 flex items-center gap-4">
-            <div className="relative grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 text-white shadow-lg shadow-teal-600/20">
-              <span className="absolute h-12 w-12 rounded-2xl bg-teal-500" />
-              <span className="absolute h-12 w-12 rotate-90 rounded-2xl bg-emerald-500" />
-              <span className="relative text-4xl font-black leading-none">+</span>
-            </div>
-            <div>
-              <p className="text-4xl font-bold tracking-tight text-[#0c4050]">
-                Mediora
-              </p>
-              <p className="mt-1 text-sm font-medium text-slate-700">
-                Your Health, Our Priority
-              </p>
-            </div>
+          <div className="relative z-10">
+            <Image
+              src="/images/mediora_logo.png"
+              alt="Mediora"
+              width={270}
+              height={135}
+              priority
+              className="-ml-14 -mt-8 h-auto w-64"
+            />
+            <p className="-mt-8 ml-10 text-sm font-medium text-slate-700">
+              Your Health, Our Priority
+            </p>
           </div>
 
           <div className="relative z-10 mt-20 max-w-lg lg:mt-24">
