@@ -42,7 +42,7 @@ function TextField({ label, placeholder, type = "text", name, autoComplete, icon
   return (
     <label className="block">
       <span className="text-sm font-bold text-slate-900">{label}</span>
-      <span className="mt-2 flex h-14 items-center rounded-xl border border-slate-200 bg-white px-4 text-slate-400 shadow-sm transition focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-100">
+      <span className="mt-2 flex h-12 items-center rounded-xl border border-slate-200 bg-white px-3 text-slate-400 shadow-sm transition focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-100">
         <span className="grid h-8 w-8 shrink-0 place-items-center">
           <FieldIcon type={icon} />
         </span>
@@ -67,32 +67,29 @@ export default function RegisterPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f5fbfa] p-4 text-slate-950 sm:p-6 lg:p-12">
       <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
-        <div className="flex items-center justify-center px-6 py-9 sm:px-10 lg:px-12">
-          <div className="w-full max-w-[555px]">
-            <div>
+        <div className="flex items-center justify-center px-5 py-10 sm:px-8 lg:px-16">
+          <section className="w-full max-w-[480px] rounded-[1.75rem] bg-white px-7 py-8 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:px-10 sm:py-9">
+            <div className="flex justify-center">
               <Image
-                src="/images/mediora_logo.png"
+                src="/images/mediora_logo_clean.png"
                 alt="Mediora"
-                width={245}
-                height={122}
+                width={220}
+                height={159}
                 priority
-                className="-ml-12 -mt-8 h-auto w-56"
+                className="h-auto w-24 sm:w-28"
               />
-              <p className="-mt-8 ml-12 text-xs font-semibold text-slate-600">
-                Your Health, Our Priority
-              </p>
             </div>
 
-            <div className="mt-10">
-              <h1 className="text-4xl font-bold tracking-tight text-slate-950">
+            <div className="mt-3 text-center">
+              <h1 className="text-3xl font-bold tracking-tight text-[#0d4050]">
                 Create <span className="text-teal-600">your account</span>
               </h1>
-              <p className="mt-5 max-w-sm text-lg font-semibold leading-7 text-slate-500">
+              <p className="mx-auto mt-3 max-w-sm text-base font-medium leading-6 text-slate-500">
                 Join Mediora and take the first step towards better health.
               </p>
             </div>
 
-            <form className="mt-9 space-y-5">
+            <form className="mt-6 space-y-4">
               <TextField
                 label="Full Name"
                 name="fullName"
@@ -114,7 +111,7 @@ export default function RegisterPage() {
                 placeholder="Enter your email address"
               />
 
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <TextField
                   label="Password"
                   name="password"
@@ -135,7 +132,7 @@ export default function RegisterPage() {
 
               <button
                 type="button"
-                className="flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#079f85] px-6 text-base font-bold text-white shadow-lg shadow-teal-600/18 transition hover:bg-[#078c77] focus:outline-none focus:ring-4 focus:ring-teal-100"
+                className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#08aa9c] px-6 text-base font-bold text-white shadow-lg shadow-teal-600/20 transition hover:bg-[#07998c] focus:outline-none focus:ring-4 focus:ring-teal-100"
               >
                 Create Account
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none">
@@ -143,29 +140,16 @@ export default function RegisterPage() {
                 </svg>
               </button>
 
-              <div className="flex items-center gap-5 text-slate-400">
-                <span className="h-px flex-1 bg-slate-200" />
-                <span className="text-base font-semibold">or</span>
-                <span className="h-px flex-1 bg-slate-200" />
-              </div>
-
-              <button
-                type="button"
-                className="flex h-14 w-full items-center justify-center gap-4 rounded-xl border border-slate-200 bg-white px-6 text-base font-bold text-slate-900 shadow-sm transition hover:border-teal-200 hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-100"
-              >
-                <span className="text-2xl font-black leading-none text-blue-500">G</span>
-                Sign up with Google
-              </button>
             </form>
 
-            <p className="mt-7 text-center text-base font-semibold text-slate-500">
+            <p className="mt-6 text-center text-base font-medium text-slate-500">
               Already have an account?{" "}
               <Link href="/login" className="font-bold text-teal-600 transition hover:text-teal-800">
                 Sign in
               </Link>
             </p>
 
-            <p className="mt-16 flex items-center gap-4 text-sm font-semibold text-slate-500">
+            <p className="mt-6 flex items-center justify-center gap-3 text-center text-xs font-semibold text-slate-500">
               <span className="grid h-8 w-8 shrink-0 place-items-center text-teal-600">
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
                   <path d="M12 3.5 18 5.7v5.2c0 3.8-2.4 6.8-6 8.2-3.6-1.4-6-4.4-6-8.2V5.7l6-2.2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
@@ -174,19 +158,14 @@ export default function RegisterPage() {
               </span>
               We protect your privacy and your data is secure with us.
             </p>
-          </div>
+          </section>
         </div>
 
-        <div className="relative min-h-[380px] overflow-hidden lg:min-h-full">
-          <Image
-            src="/images/register-couple.png"
-            alt="Elderly couple smiling while using a smartphone"
-            fill
-            priority
-            sizes="(min-width: 1024px) 56vw, 100vw"
-            className="object-cover object-center"
-          />
-        </div>
+        <div
+          aria-label="Elderly couple smiling while using a smartphone"
+          className="relative hidden min-h-[380px] overflow-hidden bg-cover bg-center md:block lg:min-h-full"
+          style={{ backgroundImage: "url('/images/register-couple.webp')" }}
+        />
       </section>
     </main>
   );
