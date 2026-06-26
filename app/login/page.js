@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 function Icon({ children }) {
   return (
@@ -67,6 +70,8 @@ function FieldIcon({ type }) {
 }
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f5fbfa] p-4 text-slate-900 sm:p-6 lg:p-12">
       <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
@@ -80,7 +85,7 @@ export default function LoginPage() {
           <section className="w-full max-w-[480px] rounded-[1.75rem] bg-white px-7 py-8 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:px-10 sm:py-9">
             <div className="flex justify-center">
               <Image
-                src="/images/mediora_logo_clean.png"
+                src="/images/mediora_textlogo.png"
                 alt="Mediora"
                 width={220}
                 height={159}
@@ -126,15 +131,27 @@ export default function LoginPage() {
                     <FieldIcon type="lock" />
                   </Icon>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     autoComplete="current-password"
                     placeholder="Enter your password"
                     className="h-full min-w-0 flex-1 bg-transparent px-2 text-base text-slate-900 outline-none placeholder:text-slate-400"
                   />
-                  <Icon>
-                    <FieldIcon type="eye" />
-                  </Icon>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((visible) => !visible)}
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-lg transition hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showPassword}
+                  >
+                    <Image
+                      src={showPassword ? "/images/eye-crossed.png" : "/images/eye.png"}
+                      alt=""
+                      width={22}
+                      height={22}
+                      className="h-5 w-5 object-contain opacity-70"
+                    />
+                  </button>
                 </span>
               </label>
 
