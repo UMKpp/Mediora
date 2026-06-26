@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 function FieldIcon({ type }) {
   if (type === "email") {
@@ -38,25 +41,57 @@ function FieldIcon({ type }) {
   );
 }
 
-function TextField({ label, placeholder, type = "text", name, autoComplete, icon }) {
+function TextField({
+  label,
+  placeholder,
+  type = "text",
+  name,
+  autoComplete,
+  icon,
+  visible,
+  onToggleVisibility,
+  value,
+  onChange,
+  hasError = false,
+}) {
+  const isPassword = type === "password";
+  const fieldStateClass = hasError
+    ? "border-rose-300 bg-rose-50 text-slate-400 focus-within:border-rose-400 focus-within:ring-4 focus-within:ring-rose-100"
+    : "border-slate-200 bg-white text-slate-400 focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-100";
+
   return (
     <label className="block">
       <span className="text-sm font-bold text-slate-900">{label}</span>
-      <span className="mt-2 flex h-12 items-center rounded-xl border border-slate-200 bg-white px-3 text-slate-400 shadow-sm transition focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-100">
+      <span className={`mt-2 flex h-12 items-center rounded-xl border px-3 shadow-sm transition ${fieldStateClass}`}>
         <span className="grid h-8 w-8 shrink-0 place-items-center">
           <FieldIcon type={icon} />
         </span>
         <input
-          type={type}
+          type={isPassword && visible ? "text" : type}
           name={name}
           autoComplete={autoComplete}
           placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          aria-invalid={hasError}
           className="h-full min-w-0 flex-1 bg-transparent px-2 text-base font-medium text-slate-900 outline-none placeholder:text-slate-400"
         />
-        {type === "password" && (
-          <span className="grid h-8 w-8 shrink-0 place-items-center">
-            <FieldIcon type="eye" />
-          </span>
+        {isPassword && (
+          <button
+            type="button"
+            onClick={onToggleVisibility}
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg transition hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-100"
+            aria-label={visible ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`}
+            aria-pressed={visible}
+          >
+            <Image
+              src={visible ? "/images/eye-crossed.png" : "/images/eye.png"}
+              alt=""
+              width={20}
+              height={20}
+              className="h-5 w-5 object-contain opacity-70"
+            />
+          </button>
         )}
       </span>
     </label>
@@ -64,6 +99,13 @@ function TextField({ label, placeholder, type = "text", name, autoComplete, icon
 }
 
 export default function RegisterPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const passwordsMismatch =
+    confirmPassword.length > 0 && password !== confirmPassword;
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f5fbfa] p-4 text-slate-950 sm:p-6 lg:p-12">
       <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
@@ -71,7 +113,7 @@ export default function RegisterPage() {
           <section className="w-full max-w-[480px] rounded-[1.75rem] bg-white px-7 py-8 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:px-10 sm:py-9">
             <div className="flex justify-center">
               <Image
-                src="/images/mediora_logo_clean.png"
+                src="/images/mediora_textlogo.png"
                 alt="Mediora"
                 width={220}
                 height={159}
@@ -119,6 +161,10 @@ export default function RegisterPage() {
                   icon="lock"
                   autoComplete="new-password"
                   placeholder="Create a password"
+                  visible={showPassword}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  onToggleVisibility={() => setShowPassword((visible) => !visible)}
                 />
                 <TextField
                   label="Confirm Password"
@@ -127,6 +173,13 @@ export default function RegisterPage() {
                   icon="lock"
                   autoComplete="new-password"
                   placeholder="Confirm your password"
+                  visible={showConfirmPassword}
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  hasError={passwordsMismatch}
+                  onToggleVisibility={() =>
+                    setShowConfirmPassword((visible) => !visible)
+                  }
                 />
               </div>
 
