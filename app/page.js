@@ -31,7 +31,7 @@ export default function Home() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/images/mediora_logo_clean.png"
+              src="/images/mediora_textlogo.png"
               alt="Mediora"
               width={120}
               height={87}
