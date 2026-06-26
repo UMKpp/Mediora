@@ -27,3 +27,70 @@ button,
 input {
   font: inherit;
 }
+
+input {
+  background-color: transparent;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #0f172a;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  caret-color: #0f172a;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+@keyframes analysis-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes analysis-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes rotate-ring {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.analysis-live-card {
+  animation:
+    analysis-card-in 0.55s ease-out both var(--analysis-delay, 0ms),
+    analysis-float 3.8s ease-in-out infinite calc(var(--analysis-delay, 0ms) + 700ms);
+}
+
+.analysis-ring-spin {
+  animation: rotate-ring 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .analysis-live-card {
+    animation: none;
+  }
+
+  .analysis-ring-spin {
+    animation: none;
+  }
+}
