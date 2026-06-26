@@ -108,11 +108,11 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="max-w-2xl">
             <h2 className="text-3xl font-black tracking-tight text-[#0d4050] sm:text-4xl">
-              Features available after sign in
+              Unlock the Full Mediora Experience
             </h2>
             <p className="mt-4 text-base font-medium leading-7 text-slate-600">
-              Explore what Mediora offers. To actually use these tools, create
-              an account or sign in first.
+              Sign in or create an account to access personalized healthcare
+              tools designed to support you every step of the way.
             </p>
           </div>
 
