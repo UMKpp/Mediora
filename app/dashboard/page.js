@@ -12,6 +12,8 @@ const featureCards = [
     icon: "/images/symptom_checker.png",
     cta: "Start Check",
     hint: "Resume your last check-in",
+    progressLabel: "Check-in progress",
+    progressValue: "40%",
     progress: 40,
   },
   {
@@ -21,6 +23,9 @@ const featureCards = [
     icon: "/images/stethoscope.png",
     cta: "Find Doctors",
     hint: "Recommended for your area",
+    progressLabel: "Search readiness",
+    progressValue: "Recommended",
+    progress: 70,
   },
   {
     title: "Find Pharmacies",
@@ -29,6 +34,9 @@ const featureCards = [
     icon: "/images/pharmacy.png",
     cta: "Find Pharmacies",
     hint: "Open-now options available",
+    progressLabel: "Location access",
+    progressValue: "Ready",
+    progress: 65,
   },
   {
     title: "Emergency Guidance",
@@ -37,6 +45,9 @@ const featureCards = [
     icon: "/images/alert.png",
     cta: "View Guidance",
     hint: "Quick help categories ready",
+    progressLabel: "Quick help setup",
+    progressValue: "Ready",
+    progress: 80,
   },
 ];
 
@@ -71,8 +82,9 @@ export default function DashboardPage() {
   const pageSpacing = simpleMode ? "space-y-8" : "space-y-6";
   const cardPadding = simpleMode ? "p-7 sm:p-8" : "p-6";
   const gridClass = simpleMode
-    ? "grid gap-6 md:grid-cols-2"
-    : "grid gap-5 sm:grid-cols-2 xl:grid-cols-4";
+    ? "grid items-stretch gap-6 md:grid-cols-2"
+    : "grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4";
+  const featureCardHeight = simpleMode ? "min-h-[304px]" : "min-h-[334px]";
   const eyebrowText = olderAdultText ? "text-base" : "text-sm";
   const helperText = olderAdultText ? "text-base leading-7" : "text-sm";
   const bodyText = olderAdultText ? "text-lg leading-8" : "text-base leading-7";
@@ -189,45 +201,52 @@ export default function DashboardPage() {
           <Link
             key={card.href}
             href={card.href}
-            className={`group rounded-3xl border border-teal-100 bg-white ${cardPadding} shadow-lg shadow-teal-900/5 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10 active:scale-[0.98]`}
+            className={`group flex h-full ${featureCardHeight} flex-col rounded-3xl border border-teal-100 bg-white ${cardPadding} shadow-lg shadow-teal-900/5 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10 active:scale-[0.98]`}
           >
-            <div className="flex items-start justify-between gap-4">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-teal-50 transition group-hover:bg-[#08aa9c]">
-                <Image
-                  src={card.icon}
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 animate-pulse object-contain transition group-hover:invert"
-                />
-              </span>
-              <span className={`rounded-full bg-teal-50 px-3 py-1 font-black text-teal-700 ${olderAdultText ? "text-sm" : "text-xs"}`}>
-                {card.hint}
-              </span>
+            <div>
+              <div className="flex min-h-14 items-start justify-between gap-4">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-teal-50 transition group-hover:bg-[#08aa9c]">
+                  <Image
+                    src={card.icon}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 animate-pulse object-contain transition group-hover:invert"
+                  />
+                </span>
+                <span className={`rounded-full bg-teal-50 px-3 py-1 font-black leading-5 text-teal-700 ${olderAdultText ? "text-sm" : "text-xs"}`}>
+                  {card.hint}
+                </span>
+              </div>
+
+              <h3 className={`mt-5 font-black text-slate-950 ${cardTitle}`}>
+                {card.title}
+              </h3>
+              <p className={`mt-3 font-medium text-slate-600 ${cardBody}`}>
+                {card.description}
+              </p>
             </div>
 
-            <h3 className={`mt-5 font-black text-slate-950 ${cardTitle}`}>
-              {card.title}
-            </h3>
-            <p className={`mt-3 font-medium text-slate-600 ${cardBody}`}>
-              {card.description}
-            </p>
-
-            {card.progress && (
-              <div className="mt-5">
-                <div className={`flex items-center justify-between font-black text-slate-600 ${olderAdultText ? "text-sm" : "text-xs"}`}>
-                  <span>Check-in progress</span>
-                  <span>{card.progress}%</span>
+            <div className="mt-auto pt-5">
+              <div>
+                <div className={`flex items-center justify-between gap-3 font-black text-slate-600 ${olderAdultText ? "text-sm" : "text-xs"}`}>
+                  <span>{card.progressLabel}</span>
+                  <span className="shrink-0">{card.progressValue}</span>
                 </div>
                 <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-teal-50">
-                  <div className="h-full w-[40%] rounded-full bg-[#08aa9c]" />
+                  <div
+                    className="h-full rounded-full bg-[#08aa9c]"
+                    style={{ width: `${card.progress}%` }}
+                  />
                 </div>
               </div>
-            )}
 
-            <span className={`mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[#08aa9c] px-4 font-black text-white shadow-lg shadow-teal-700/20 transition group-hover:bg-[#07998c] ${buttonText}`}>
-              {card.cta}
-            </span>
+              <span
+                className={`mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[#08aa9c] px-4 font-black text-white shadow-lg shadow-teal-700/20 transition group-hover:bg-[#07998c] ${buttonText}`}
+              >
+                {card.cta}
+              </span>
+            </div>
           </Link>
         ))}
       </section>
