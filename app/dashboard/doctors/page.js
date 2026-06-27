@@ -409,7 +409,7 @@ export default function DoctorsPage() {
           </div>
           <span className="grid h-16 w-16 place-items-center rounded-3xl bg-teal-50">
             <Image
-              src="/images/stethoscope.png"
+              src="/images/doctor.png"
               alt=""
               width={34}
               height={34}
