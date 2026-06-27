@@ -69,17 +69,151 @@ function FieldIcon({ type }) {
   );
 }
 
+function PosterIcon({ type }) {
+  if (type === "pin") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+        <path
+          d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+        <circle cx="12" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.8" />
+      </svg>
+    );
+  }
+
+  if (type === "heart") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+        <path
+          d="M3.5 12h3l2-5 3.5 10 2.5-6H20"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+      <path
+        d="M12 3.5 18 5.7v5.2c0 3.8-2.4 6.8-6 8.2-3.6-1.4-6-4.4-6-8.2V5.7l6-2.2Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 8v6M9 11h6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f5fbfa] p-4 text-slate-900 sm:p-6 lg:p-12">
       <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
-        <div
-          aria-label="Smiling family sitting together in a calm healthcare setting"
-          className="relative hidden min-h-[380px] overflow-hidden bg-cover bg-center md:block lg:min-h-full"
-          style={{ backgroundImage: "url('/images/login-family.webp')" }}
-        />
+        <div className="hidden items-center justify-center bg-[#f1fbf8] p-3 md:flex lg:p-5">
+          <section className="relative flex aspect-[3/4] w-full max-w-[620px] flex-col overflow-hidden rounded-[2rem] border border-teal-100 bg-gradient-to-b from-[#dcfbf4] via-[#f7fffc] to-white p-7 shadow-2xl shadow-teal-900/10 lg:p-9">
+            <div
+              className="absolute right-0 top-0 h-48 w-56 opacity-45"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, rgba(8,170,156,0.26) 1.4px, transparent 1.5px)",
+                backgroundSize: "18px 18px",
+              }}
+            />
+
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 220 220"
+              className="absolute -right-24 top-12 h-64 w-64 text-white/80"
+              fill="none"
+            >
+              <path
+                d="M110 18 180 44v58c0 48-28 86-70 108-42-22-70-60-70-108V44l70-26Z"
+                stroke="currentColor"
+                strokeWidth="10"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M110 68v72M74 104h72"
+                stroke="currentColor"
+                strokeWidth="10"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            <div className="relative z-10 flex items-center gap-3">
+              <Image
+                src="/images/mediora_logo.png"
+                alt=""
+                width={52}
+                height={52}
+                priority
+                className="h-auto w-11"
+              />
+              <div>
+                <p className="text-2xl font-black leading-none tracking-tight text-[#0d4050]">
+                  Mediora
+                </p>
+                <p className="mt-1 text-xs font-bold text-slate-500">
+                  Your Health, Our Priority.
+                </p>
+              </div>
+            </div>
+
+            <div className="relative z-10 mt-9">
+              <h2 className="text-4xl font-black leading-tight tracking-tight text-[#0d4050] lg:text-5xl">
+                Better Health.
+                <span className="block">Better Life.</span>
+              </h2>
+              <p className="mt-5 max-w-sm text-base font-semibold leading-7 text-slate-500">
+                Mediora is your smart healthcare companion for a healthier you
+                and your loved ones.
+              </p>
+            </div>
+
+            <div className="relative z-10 mx-[-0.35rem] mt-8 min-h-[265px] overflow-hidden rounded-[1.75rem] lg:min-h-[330px]">
+              <div
+                aria-label="Smiling family sitting together in a cozy home"
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: "url('/images/login-family.webp')" }}
+              />
+              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white via-white/75 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/75 to-transparent" />
+            </div>
+
+            <div className="relative z-10 mt-auto grid grid-cols-3 gap-3 pt-7">
+              {[
+                ["shield", "Trusted Care"],
+                ["pin", "Find Doctors Nearby"],
+                ["heart", "Health Guidance"],
+              ].map(([icon, label]) => (
+                <div
+                  key={label}
+                  className="flex flex-col items-center gap-2 px-1 text-center text-teal-700"
+                >
+                  <span className="grid h-9 w-9 place-items-center">
+                    <PosterIcon type={icon} />
+                  </span>
+                  <span className="text-xs font-black leading-4 text-[#0d4050]">
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
 
         <div className="flex items-center justify-center px-5 py-10 sm:px-8 lg:px-16">
           <section className="w-full max-w-[480px] rounded-[1.75rem] bg-white px-7 py-8 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:px-10 sm:py-9">
