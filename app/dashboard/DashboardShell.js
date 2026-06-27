@@ -15,7 +15,7 @@ const navigation = [
   {
     label: "Find Doctors",
     href: "/dashboard/doctors",
-    iconImage: "/images/stethoscope.png",
+    iconImage: "/images/doctor.png",
   },
   {
     label: "Find Pharmacies",
