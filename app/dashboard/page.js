@@ -12,9 +12,6 @@ const featureCards = [
     icon: "/images/symptom_checker.png",
     cta: "Start Check",
     hint: "Resume your last check-in",
-    progressLabel: "Check-in progress",
-    progressValue: "40%",
-    progress: 40,
   },
   {
     title: "Find Doctors",
@@ -23,9 +20,6 @@ const featureCards = [
     icon: "/images/stethoscope.png",
     cta: "Find Doctors",
     hint: "Recommended for your area",
-    progressLabel: "Search readiness",
-    progressValue: "Recommended",
-    progress: 70,
   },
   {
     title: "Find Pharmacies",
@@ -34,9 +28,6 @@ const featureCards = [
     icon: "/images/pharmacy.png",
     cta: "Find Pharmacies",
     hint: "Open-now options available",
-    progressLabel: "Location access",
-    progressValue: "Ready",
-    progress: 65,
   },
   {
     title: "Emergency Guidance",
@@ -45,9 +36,6 @@ const featureCards = [
     icon: "/images/alert.png",
     cta: "View Guidance",
     hint: "Quick help categories ready",
-    progressLabel: "Quick help setup",
-    progressValue: "Ready",
-    progress: 80,
   },
 ];
 
@@ -84,7 +72,7 @@ export default function DashboardPage() {
   const gridClass = simpleMode
     ? "grid items-stretch gap-6 md:grid-cols-2"
     : "grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4";
-  const featureCardHeight = simpleMode ? "min-h-[304px]" : "min-h-[334px]";
+  const featureCardHeight = simpleMode ? "min-h-[268px]" : "min-h-[292px]";
   const eyebrowText = olderAdultText ? "text-base" : "text-sm";
   const helperText = olderAdultText ? "text-base leading-7" : "text-sm";
   const bodyText = olderAdultText ? "text-lg leading-8" : "text-base leading-7";
@@ -228,21 +216,8 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-auto pt-5">
-              <div>
-                <div className={`flex items-center justify-between gap-3 font-black text-slate-600 ${olderAdultText ? "text-sm" : "text-xs"}`}>
-                  <span>{card.progressLabel}</span>
-                  <span className="shrink-0">{card.progressValue}</span>
-                </div>
-                <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-teal-50">
-                  <div
-                    className="h-full rounded-full bg-[#08aa9c]"
-                    style={{ width: `${card.progress}%` }}
-                  />
-                </div>
-              </div>
-
               <span
-                className={`mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[#08aa9c] px-4 font-black text-white shadow-lg shadow-teal-700/20 transition group-hover:bg-[#07998c] ${buttonText}`}
+                className={`inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[#08aa9c] px-4 font-black text-white shadow-lg shadow-teal-700/20 transition group-hover:bg-[#07998c] ${buttonText}`}
               >
                 {card.cta}
               </span>
