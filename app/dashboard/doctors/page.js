@@ -1,20 +1,161 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+
+const provinceDistricts = {
+  "Central Province": ["Kandy", "Matale", "Nuwara Eliya"],
+  "Eastern Province": ["Ampara", "Batticaloa", "Trincomalee"],
+  "North Central Province": ["Anuradhapura", "Polonnaruwa"],
+  "North Western Province": ["Kurunegala", "Puttalam"],
+  "Northern Province": ["Jaffna", "Kilinochchi", "Mannar", "Mullaitivu", "Vavuniya"],
+  "Sabaragamuwa Province": ["Kegalle", "Ratnapura"],
+  "Southern Province": ["Galle", "Hambantota", "Matara"],
+  "Uva Province": ["Badulla", "Monaragala"],
+  "Western Province": ["Colombo", "Gampaha", "Kalutara"],
+};
+
+const majorDistricts = [
+  "Colombo",
+  "Kandy",
+  "Galle",
+  "Jaffna",
+  "Kurunegala",
+  "Anuradhapura",
+  "Badulla",
+  "Trincomalee",
+  "Ratnapura",
+];
+
+const commonSymptoms = [
+  "fever",
+  "cough",
+  "headache",
+  "fatigue",
+  "sore throat",
+  "runny nose",
+];
+
+const symptomOptions = [
+  "All Symptoms",
+  "fever",
+  "cough",
+  "headache",
+  "fatigue",
+  "sore throat",
+  "runny nose",
+  "chest pain",
+  "skin rash",
+  "joint pain",
+  "pregnancy care",
+  "dizziness",
+];
+
+const symptomSpecializationMap = {
+  fever: ["General Physician"],
+  cough: ["General Physician", "ENT Specialist"],
+  "sore throat": ["ENT Specialist"],
+  "child fever": ["Pediatrician"],
+  "chest pain": ["Cardiologist"],
+  "skin rash": ["Dermatologist"],
+  headache: ["General Physician", "Neurologist"],
+  dizziness: ["General Physician", "Neurologist"],
+  "stomach pain": ["General Physician"],
+  "joint pain": ["Orthopedic Specialist"],
+  "ear pain": ["ENT Specialist"],
+};
+
+const baseSpecialists = [
+  {
+    specialization: "General Physician",
+    symptoms: [...commonSymptoms, "dizziness", "stomach pain"],
+    qualification: "MBBS, Diploma in Family Medicine",
+  },
+  {
+    specialization: "Pediatrician",
+    symptoms: [...commonSymptoms, "child fever", "child cough"],
+    qualification: "MBBS, MD Pediatrics",
+  },
+  {
+    specialization: "ENT Specialist",
+    symptoms: [...commonSymptoms, "ear pain", "blocked nose"],
+    qualification: "MBBS, MS ENT",
+  },
+];
+
+const extraSpecialists = [
+  {
+    specialization: "Cardiologist",
+    symptoms: ["chest pain", "shortness of breath", "palpitations", "fatigue"],
+    qualification: "MBBS, MD Cardiology",
+  },
+  {
+    specialization: "Dermatologist",
+    symptoms: ["skin rash", "itching", "acne", "allergy"],
+    qualification: "MBBS, Diploma in Dermatology",
+  },
+  {
+    specialization: "Neurologist",
+    symptoms: ["headache", "dizziness", "migraine", "numbness"],
+    qualification: "MBBS, MD Neurology",
+  },
+  {
+    specialization: "Gynecologist",
+    symptoms: ["pregnancy care", "pelvic pain", "fatigue", "women health"],
+    qualification: "MBBS, MD Obstetrics and Gynecology",
+  },
+  {
+    specialization: "Orthopedic Specialist",
+    symptoms: ["joint pain", "back pain", "body aches", "sports injury"],
+    qualification: "MBBS, MS Orthopedics",
+  },
+];
+
+const doctorNames = [
+  "Ayan Perera",
+  "Mihiri Silva",
+  "Sanjaya Fernando",
+  "Nadeesha Jayawardena",
+  "Ruwan Samarasinghe",
+  "Tharushi Gunawardena",
+  "Arun Rajendran",
+  "Fathima Ameen",
+  "Kavindu Wickrama",
+  "Ishara Senanayake",
+  "Malith Abeysekara",
+  "Yasmin Rahman",
+  "Suresh Nadarajah",
+  "Dinuka Herath",
+  "Anjali Weerasinghe",
+  "Harini Dissanayake",
+  "Nimal Karunaratne",
+  "Lasith Gunasekara",
+  "Meera Selvarajah",
+  "Chamari Edirisinghe",
+  "Pradeep Nanayakkara",
+  "Shanika Hettiarachchi",
+  "Dinesh Pathirana",
+  "Arosha Kularatne",
+  "Ravindu Mallawarachchi",
+  "Keshini Wijesuriya",
+  "Mahesh Ilangasinghe",
+  "Sahana Balasooriya",
+  "Roshan Thilakarathna",
+  "Navodi Ekanayake",
+];
 
 const specializations = [
   "All Specializations",
   "General Physician",
-  "Cardiology",
-  "Dermatology",
-  "Pediatrics",
-  "Neurology",
-  "Orthopedics",
-  "Gynecology",
+  "Pediatrician",
+  "ENT Specialist",
+  "Cardiologist",
+  "Dermatologist",
+  "Neurologist",
+  "Gynecologist",
+  "Orthopedic Specialist",
 ];
-
-const cities = ["Colombo", "Kandy", "Galle", "Jaffna", "Negombo", "Kurunegala"];
 
 const quickFilters = [
   "Available Today",
@@ -23,120 +164,75 @@ const quickFilters = [
   "Online Consultation",
 ];
 
-const doctors = [
-  {
-    name: "Dr. Nimal Perera",
-    initials: "NP",
-    specialization: "Cardiology",
-    hospital: "Colombo National Hospital",
-    city: "Colombo",
-    experience: "12 years experience",
-    rating: "4.8",
-    availability: "Available Today",
-    qualifications: "MBBS, MD Cardiology",
-    contact: "+94 77 123 4567",
-    hours: "Mon - Fri, 9:00 AM - 4:00 PM",
-    languages: "Sinhala, English",
-    online: true,
-    nearby: true,
-  },
-  {
-    name: "Dr. Anjali Fernando",
-    initials: "AF",
-    specialization: "Pediatrics",
-    hospital: "Lady Ridgeway Children Hospital",
-    city: "Colombo",
-    experience: "9 years experience",
-    rating: "4.9",
-    availability: "Available Today",
-    qualifications: "MBBS, MD Pediatrics",
-    contact: "+94 76 225 8841",
-    hours: "Tue - Sat, 8:30 AM - 2:30 PM",
-    languages: "Sinhala, Tamil, English",
-    online: true,
-    nearby: false,
-  },
-  {
-    name: "Dr. Suresh Rajan",
-    initials: "SR",
-    specialization: "Neurology",
-    hospital: "Kandy Teaching Hospital",
-    city: "Kandy",
-    experience: "15 years experience",
-    rating: "4.7",
-    availability: "Next Available Tomorrow",
-    qualifications: "MBBS, MD Neurology",
-    contact: "+94 71 420 9932",
-    hours: "Mon - Thu, 10:00 AM - 3:00 PM",
-    languages: "Tamil, English",
-    online: false,
-    nearby: true,
-  },
-  {
-    name: "Dr. Kavindi Silva",
-    initials: "KS",
-    specialization: "Dermatology",
-    hospital: "Galle Skin Care Clinic",
-    city: "Galle",
-    experience: "8 years experience",
-    rating: "4.6",
-    availability: "Available Today",
-    qualifications: "MBBS, Diploma in Dermatology",
-    contact: "+94 75 610 2114",
-    hours: "Wed - Sun, 11:00 AM - 5:00 PM",
-    languages: "Sinhala, English",
-    online: true,
-    nearby: false,
-  },
-  {
-    name: "Dr. Harith Wijesinghe",
-    initials: "HW",
-    specialization: "Orthopedics",
-    hospital: "Negombo General Hospital",
-    city: "Negombo",
-    experience: "11 years experience",
-    rating: "4.5",
-    availability: "Available This Week",
-    qualifications: "MBBS, MS Orthopedics",
-    contact: "+94 70 908 4512",
-    hours: "Mon - Fri, 1:00 PM - 6:00 PM",
-    languages: "Sinhala, English",
-    online: false,
-    nearby: true,
-  },
-  {
-    name: "Dr. Fathima Ameen",
-    initials: "FA",
-    specialization: "Gynecology",
-    hospital: "Kurunegala Women Health Centre",
-    city: "Kurunegala",
-    experience: "10 years experience",
-    rating: "4.8",
-    availability: "Available Today",
-    qualifications: "MBBS, MD Obstetrics and Gynecology",
-    contact: "+94 72 332 1870",
-    hours: "Tue - Sat, 9:30 AM - 4:30 PM",
-    languages: "Tamil, Sinhala, English",
-    online: true,
-    nearby: false,
-  },
-  {
-    name: "Dr. Lasith Gunasekara",
-    initials: "LG",
-    specialization: "General Physician",
-    hospital: "Jaffna Family Medical Centre",
-    city: "Jaffna",
-    experience: "7 years experience",
-    rating: "4.4",
-    availability: "Available Today",
-    qualifications: "MBBS, Diploma in Family Medicine",
-    contact: "+94 78 654 2301",
-    hours: "Daily, 8:00 AM - 12:00 PM",
-    languages: "Tamil, English",
-    online: true,
-    nearby: true,
-  },
-];
+const provinces = ["All Provinces", ...Object.keys(provinceDistricts)];
+const districts = Object.values(provinceDistricts).flat();
+
+function getInitials(name) {
+  return name
+    .replace("Dr. ", "")
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function getDoctorName(index) {
+  return `Dr. ${doctorNames[index % doctorNames.length]}`;
+}
+
+function createDoctor({ province, district, specialist, index, specialistIndex }) {
+  const city = district;
+  const rating = (4.3 + ((index + specialistIndex) % 7) * 0.1).toFixed(1);
+  const availability =
+    (index + specialistIndex) % 3 === 0
+      ? "Available Today"
+      : (index + specialistIndex) % 3 === 1
+        ? "Next Available Tomorrow"
+        : "Available This Week";
+  const name = getDoctorName(index * 8 + specialistIndex);
+
+  return {
+    id: `${district.toLowerCase().replaceAll(" ", "-")}-${specialist.specialization.toLowerCase().replaceAll(" ", "-")}`,
+    name,
+    initials: getInitials(name),
+    specialization: specialist.specialization,
+    province,
+    district,
+    city,
+    hospital: `${district} Mediora Care Centre`,
+    symptoms: specialist.symptoms,
+    experience: `${6 + ((index + specialistIndex) % 12)} years experience`,
+    rating,
+    availability,
+    phone: `+94 7${(index + specialistIndex) % 9} ${String(2100000 + index * 1137 + specialistIndex * 271).slice(0, 7)}`,
+    consultationHours:
+      specialistIndex % 2 === 0
+        ? "Mon - Fri, 9:00 AM - 4:00 PM"
+        : "Tue - Sat, 10:00 AM - 5:00 PM",
+    languages:
+      province === "Northern Province" || province === "Eastern Province"
+        ? "Tamil, Sinhala, English"
+        : "Sinhala, Tamil, English",
+    qualifications: specialist.qualification,
+    online: (index + specialistIndex) % 2 === 0,
+    nearby: (index + specialistIndex) % 3 !== 1,
+  };
+}
+
+const doctors = Object.entries(provinceDistricts).flatMap(
+  ([province, provinceDistrictList], provinceIndex) =>
+    provinceDistrictList.flatMap((district, districtIndex) => {
+      const districtSpecialists = majorDistricts.includes(district)
+        ? [...baseSpecialists, ...extraSpecialists]
+        : baseSpecialists;
+      const index = provinceIndex * 10 + districtIndex;
+
+      return districtSpecialists.map((specialist, specialistIndex) =>
+        createDoctor({ province, district, specialist, index, specialistIndex })
+      );
+    })
+);
 
 function ArrowLeftIcon() {
   return (
@@ -203,23 +299,51 @@ function ProfileAvatar({ doctor, size = "large" }) {
 
 export default function DoctorsPage() {
   const [doctorSearch, setDoctorSearch] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("All Provinces");
+  const [selectedDistrict, setSelectedDistrict] = useState("All Districts");
   const [selectedSpecialization, setSelectedSpecialization] = useState("All Specializations");
-  const [selectedCity, setSelectedCity] = useState("Colombo");
+  const [selectedSymptom, setSelectedSymptom] = useState("All Symptoms");
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
+  const districtOptions = useMemo(() => {
+    if (selectedProvince === "All Provinces") {
+      return ["All Districts", ...districts];
+    }
+
+    return ["All Districts", ...provinceDistricts[selectedProvince]];
+  }, [selectedProvince]);
+  const activeSymptom = selectedSymptom === "All Symptoms" ? "" : selectedSymptom;
+
   const filteredDoctors = useMemo(() => {
     const query = doctorSearch.trim().toLowerCase();
+    const symptomQuery = activeSymptom;
+    const mappedSpecializations = symptomSpecializationMap[symptomQuery] || [];
 
     return doctors.filter((doctor) => {
       const matchesSearch =
+        query.length === 0 ||
         doctor.name.toLowerCase().includes(query) ||
         doctor.specialization.toLowerCase().includes(query) ||
-        doctor.city.toLowerCase().includes(query);
+        doctor.province.toLowerCase().includes(query) ||
+        doctor.district.toLowerCase().includes(query) ||
+        doctor.city.toLowerCase().includes(query) ||
+        doctor.symptoms.some((symptom) => symptom.includes(query));
+      const matchesRecommendedSpecialization =
+        mappedSpecializations.length === 0 ||
+        selectedSpecialization !== "All Specializations" ||
+        mappedSpecializations.includes(doctor.specialization);
+      const matchesProvince =
+        selectedProvince === "All Provinces" || doctor.province === selectedProvince;
+      const matchesDistrict =
+        selectedDistrict === "All Districts" || doctor.district === selectedDistrict;
       const matchesSpecialization =
         selectedSpecialization === "All Specializations" ||
         doctor.specialization === selectedSpecialization;
-      const matchesCity = doctor.city === selectedCity;
+      const matchesSymptom =
+        symptomQuery.length === 0 ||
+        doctor.symptoms.some((symptom) => symptom.includes(symptomQuery)) ||
+        mappedSpecializations.includes(doctor.specialization);
       const matchesQuickFilters = activeFilters.every((filter) => {
         if (filter === "Available Today") {
           return doctor.availability === "Available Today";
@@ -240,9 +364,24 @@ export default function DoctorsPage() {
         return true;
       });
 
-      return matchesSearch && matchesSpecialization && matchesCity && matchesQuickFilters;
+      return (
+        matchesSearch &&
+        matchesRecommendedSpecialization &&
+        matchesProvince &&
+        matchesDistrict &&
+        matchesSpecialization &&
+        matchesSymptom &&
+        matchesQuickFilters
+      );
     });
-  }, [activeFilters, doctorSearch, selectedCity, selectedSpecialization]);
+  }, [
+    activeFilters,
+    activeSymptom,
+    doctorSearch,
+    selectedDistrict,
+    selectedProvince,
+    selectedSpecialization,
+  ]);
 
   function toggleQuickFilter(filter) {
     setActiveFilters((currentFilters) =>
@@ -250,6 +389,11 @@ export default function DoctorsPage() {
         ? currentFilters.filter((item) => item !== filter)
         : [...currentFilters, filter]
     );
+  }
+
+  function handleProvinceChange(province) {
+    setSelectedProvince(province);
+    setSelectedDistrict("All Districts");
   }
 
   return (
@@ -275,16 +419,22 @@ export default function DoctorsPage() {
               Find trusted healthcare professionals near you.
             </p>
           </div>
-          <span className="grid h-16 w-16 place-items-center rounded-3xl bg-teal-50 text-teal-700">
-            <DoctorIcon />
+          <span className="grid h-16 w-16 place-items-center rounded-3xl bg-teal-50">
+            <Image
+              src="/images/stethoscope.png"
+              alt=""
+              width={34}
+              height={34}
+              className="h-8 w-8 object-contain"
+            />
           </span>
         </div>
       </section>
 
       <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
-        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.95fr_0.8fr_auto] lg:items-end">
+        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[1.1fr_0.95fr_0.9fr_0.95fr_0.9fr_auto] xl:items-end">
           <label className="block">
-            <span className="text-sm font-black text-slate-900">Search doctor</span>
+            <span className="text-sm font-black text-slate-900">Optional doctor name search</span>
             <input
               type="search"
               value={doctorSearch}
@@ -292,6 +442,32 @@ export default function DoctorsPage() {
               placeholder="Search doctor name..."
               className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-medium text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
             />
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-black text-slate-900">Province</span>
+            <select
+              value={selectedProvince}
+              onChange={(event) => handleProvinceChange(event.target.value)}
+              className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-bold text-slate-700 shadow-sm outline-none transition focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
+            >
+              {provinces.map((province) => (
+                <option key={province}>{province}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-black text-slate-900">District</span>
+            <select
+              value={selectedDistrict}
+              onChange={(event) => setSelectedDistrict(event.target.value)}
+              className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-bold text-slate-700 shadow-sm outline-none transition focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
+            >
+              {districtOptions.map((district) => (
+                <option key={district}>{district}</option>
+              ))}
+            </select>
           </label>
 
           <label className="block">
@@ -308,14 +484,14 @@ export default function DoctorsPage() {
           </label>
 
           <label className="block">
-            <span className="text-sm font-black text-slate-900">City</span>
+            <span className="text-sm font-black text-slate-900">Symptom</span>
             <select
-              value={selectedCity}
-              onChange={(event) => setSelectedCity(event.target.value)}
+              value={selectedSymptom}
+              onChange={(event) => setSelectedSymptom(event.target.value)}
               className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-bold text-slate-700 shadow-sm outline-none transition focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
             >
-              {cities.map((city) => (
-                <option key={city}>{city}</option>
+              {symptomOptions.map((symptom) => (
+                <option key={symptom}>{symptom}</option>
               ))}
             </select>
           </label>
@@ -348,6 +524,10 @@ export default function DoctorsPage() {
             );
           })}
         </div>
+
+        <p className="mt-4 text-sm font-bold text-slate-500">
+          Showing {filteredDoctors.length} mock doctors across Sri Lanka.
+        </p>
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
@@ -356,7 +536,7 @@ export default function DoctorsPage() {
             <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
               {filteredDoctors.map((doctor) => (
                 <article
-                  key={doctor.name}
+                  key={doctor.id}
                   className="rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10"
                 >
                   <div className="flex items-start gap-4">
@@ -378,7 +558,7 @@ export default function DoctorsPage() {
                     </p>
                     <p className="flex items-center gap-2">
                       <span className="text-teal-700"><PinIcon /></span>
-                      <span>{doctor.city}</span>
+                      <span>{doctor.district}, {doctor.province}</span>
                     </p>
                     <p>{doctor.experience}</p>
                   </div>
@@ -393,6 +573,17 @@ export default function DoctorsPage() {
                     </span>
                   </div>
 
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {doctor.symptoms.slice(0, 3).map((symptom) => (
+                      <span
+                        key={symptom}
+                        className="rounded-full bg-slate-50 px-3 py-1 text-xs font-bold text-slate-500"
+                      >
+                        {symptom}
+                      </span>
+                    ))}
+                  </div>
+
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
                     <button
                       type="button"
@@ -402,7 +593,7 @@ export default function DoctorsPage() {
                       View Profile
                     </button>
                     <a
-                      href={`tel:${doctor.contact.replaceAll(" ", "")}`}
+                      href={`tel:${doctor.phone.replaceAll(" ", "")}`}
                       className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-200 bg-white px-4 text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
                     >
                       Contact
@@ -475,9 +666,11 @@ export default function DoctorsPage() {
                 ["Qualifications", selectedDoctor.qualifications],
                 ["Experience", selectedDoctor.experience],
                 ["Hospital", selectedDoctor.hospital],
-                ["Contact number", selectedDoctor.contact],
-                ["Consultation hours", selectedDoctor.hours],
+                ["District", `${selectedDoctor.district}, ${selectedDoctor.province}`],
+                ["Contact number", selectedDoctor.phone],
+                ["Consultation hours", selectedDoctor.consultationHours],
                 ["Languages spoken", selectedDoctor.languages],
+                ["Common symptoms", selectedDoctor.symptoms.join(", ")],
               ].map(([label, value]) => (
                 <div
                   key={label}
@@ -495,7 +688,7 @@ export default function DoctorsPage() {
 
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               <a
-                href={`tel:${selectedDoctor.contact.replaceAll(" ", "")}`}
+                href={`tel:${selectedDoctor.phone.replaceAll(" ", "")}`}
                 className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#08aa9c] px-5 text-sm font-black text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#07998c] active:scale-[0.98]"
               >
                 Contact Doctor
