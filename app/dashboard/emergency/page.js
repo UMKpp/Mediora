@@ -1,17 +1,22 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 const emergencySections = [
   {
+    id: "ambulance",
     title: "Free Emergency Ambulance Service",
     eyebrow: "Recommended first call",
     hotline: "1990",
     description:
       "The 1990 Suwa Seriya is a toll-free, island-wide pre-hospital care service. It is government-operated, fully equipped, and staffed with trained Emergency Medical Technicians who can reach users almost anywhere.",
     tip: "Users can request an ambulance directly via the 1990 Suwa Seriya Android App.",
-    calls: [{ label: "Call 1990", href: "tel:1990" }],
+    calls: [{ label: "Call 1990 Now", href: "tel:1990" }],
     urgent: true,
   },
   {
+    id: "police",
     title: "General Emergency & Police Assistance",
     eyebrow: "National emergency lines",
     description: "Use these national hotlines for urgent emergency, police, ambulance, fire, and rescue support.",
@@ -25,38 +30,78 @@ const emergencySections = [
       { label: "Call 110", href: "tel:110" },
     ],
   },
+];
+
+const quickAccessItems = [
+  { label: "Ambulance", target: "ambulance" },
+  { label: "Police", target: "police" },
+  { label: "Fire & Rescue", target: "police" },
+  { label: "Private Hospitals", target: "specialized-hospitals" },
+  { label: "Government Hospitals", target: "specialized-hospitals" },
+  { label: "Specialized Hospitals", target: "specialized-hospitals" },
+];
+
+const specializedInstitutions = [
   {
-    title: "Major Private Hospitals - 24/7 Accident & Emergency",
-    eyebrow: "Private emergency care",
-    description:
-      "For users near major cities who prefer private hospital emergency responses, these hospitals operate 24/7 emergency care departments and ambulance services.",
-    hospitals: [
-      {
-        name: "Lanka Hospitals",
-        details: ["Hotline: 1566", "Alternative: 011 453 0000"],
-      },
-      {
-        name: "Nawaloka Hospitals",
-        details: ["Hotline: 0779 511 929"],
-      },
-      {
-        name: "Durdans Hospital",
-        details: ["Hotline: 011 214 0000"],
-      },
-    ],
-    calls: [
-      { label: "Call Lanka Hospitals", href: "tel:1566" },
-      { label: "Call Nawaloka Hospitals", href: "tel:0779511929" },
-      { label: "Call Durdans Hospital", href: "tel:0112140000" },
-    ],
+    hospital: "Apeksha Hospital (Cancer Hospital)",
+    position: "Medical Superintendent",
+    phone: "011 256 6566",
+    email: "director@apeksha.lk",
   },
   {
-    title: "Government Hospital Emergency",
-    eyebrow: "Government accident service",
+    hospital: "Castle Street Hospital for Women",
+    position: "Deputy Director",
+    phone: "011 269 1111",
+    email: "info@castlestreet.lk",
+  },
+  {
+    hospital: "Kandy Base Hospital",
+    position: "Chief Medical Officer",
+    phone: "081 222 2222",
+    email: "info@kandyhospital.lk",
+  },
+  {
+    hospital: "Lady Ridgeway Hospital for Children",
+    position: "Deputy Director",
+    phone: "011 269 7111",
+    email: "info@lrh.lk",
+  },
+  {
+    hospital: "National Eye Hospital",
+    position: "Chief Medical Officer",
+    phone: "011 267 1111",
+    email: "info@eyehospital.lk",
+  },
+  {
+    hospital: "National Hospital of Colombo",
+    position: "Medical Superintendent",
+    phone: "011 269 1111",
+    email: "director@nationalhospital.lk",
+  },
+  {
+    hospital: "Lanka Hospitals",
+    position: "24/7 Emergency Care",
+    phone: "1566",
+    alternative: "011 453 0000",
+    category: "Private emergency care",
+  },
+  {
+    hospital: "Nawaloka Hospitals",
+    position: "24/7 Emergency Care",
+    phone: "0779 511 929",
+    category: "Private emergency care",
+  },
+  {
+    hospital: "Durdans Hospital",
+    position: "24/7 Emergency Care",
+    phone: "011 214 0000",
+    category: "Private emergency care",
+  },
+  {
     hospital: "Colombo National Hospital - Accident Service",
-    hotline: "011 269 1111",
-    calls: [{ label: "Call Accident Service", href: "tel:0112691111" }],
-    urgent: true,
+    position: "Government Accident Service",
+    phone: "011 269 1111",
+    category: "Government emergency care",
   },
 ];
 
@@ -101,13 +146,33 @@ function ShieldIcon() {
   );
 }
 
-function CallButton({ call, featured = false }) {
+function MailIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+      <path
+        d="M4 6.5h16v11H4v-11Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m5 7.5 7 5 7-5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CallButton({ call, featured = false, pulse = false }) {
   return (
     <a
       href={call.href}
       className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-red-600 px-5 text-center font-black text-white shadow-lg shadow-red-700/20 transition hover:bg-red-700 active:scale-[0.98] ${
         featured ? "text-base sm:text-lg" : "text-sm"
-      }`}
+      } ${pulse ? "motion-safe:animate-pulse" : ""}`}
     >
       <PhoneIcon />
       {call.label}
@@ -125,9 +190,10 @@ function ContactCard({ section }) {
 
   return (
     <article
+      id={section.id}
       className={`flex h-full flex-col overflow-hidden rounded-3xl border bg-white shadow-xl transition hover:-translate-y-1 hover:shadow-2xl ${
         section.urgent
-          ? "border-red-100 shadow-red-900/5 hover:shadow-red-900/10"
+          ? "border-teal-100 shadow-red-900/5 hover:shadow-red-900/10"
           : "border-teal-100 shadow-teal-900/5 hover:shadow-teal-900/10"
       }`}
     >
@@ -207,13 +273,21 @@ function ContactCard({ section }) {
               key={hospital.name}
               className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-5"
             >
-              <h3 className="text-lg font-black text-[#0d4050]">{hospital.name}</h3>
-              <div className="mt-2 space-y-1">
-                {hospital.details.map((detail) => (
-                  <p key={detail} className="text-base font-bold leading-6 text-slate-700">
-                    {detail}
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <h3 className="text-lg font-black text-[#0d4050]">{hospital.name}</h3>
+                <span className="w-fit rounded-full bg-teal-50 px-3 py-1 text-xs font-black text-teal-700">
+                  {hospital.badge}
+                </span>
+              </div>
+              <div className="mt-3 space-y-1">
+                <p className="text-base font-bold leading-6 text-slate-700">
+                  Hotline: <span className="font-black text-red-700">{hospital.hotline}</span>
+                </p>
+                {hospital.alternative && (
+                  <p className="text-base font-bold leading-6 text-slate-700">
+                    Alternative: {hospital.alternative}
                   </p>
-                ))}
+                )}
               </div>
             </div>
           ))}
@@ -230,45 +304,166 @@ function ContactCard({ section }) {
   );
 }
 
-export default function EmergencyPage() {
+function InstitutionCard({ institution, onViewDetails }) {
+  const telHref = `tel:${institution.phone.replaceAll(" ", "")}`;
+  const mailHref = institution.email ? `mailto:${institution.email}` : "";
+
   return (
-    <div className="space-y-7">
-      <section className="overflow-hidden rounded-3xl border border-teal-100 bg-white shadow-xl shadow-teal-900/5">
-        <div className="grid gap-0 lg:grid-cols-[1.35fr_0.65fr]">
-          <div className="p-6 sm:p-8">
-        <Link
-          href="/dashboard"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-teal-100 bg-white px-4 text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
-        >
-          <ArrowLeftIcon />
-          Back to Dashboard
-        </Link>
-        <div className="mt-7 max-w-4xl">
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-700">
-            Emergency contacts
+    <article className="flex h-full flex-col rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10">
+      <div className="flex items-start gap-4">
+        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-teal-50 text-teal-700 shadow-sm">
+          <ShieldIcon />
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-teal-700">
+            {institution.category || "National institution"}
           </p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#0d4050] sm:text-5xl lg:text-6xl">
-            Emergency & Urgent Care Guidance
-          </h1>
-          <p className="mt-4 text-base font-semibold leading-7 text-slate-600 sm:text-lg sm:leading-8">
-            Get key emergency contact numbers and urgent support options in Sri Lanka.
+          <h3 className="mt-2 text-xl font-black leading-tight text-[#0d4050]">
+            {institution.hospital}
+          </h3>
+        </div>
+      </div>
+
+      <div className="mt-5 space-y-3">
+        <div className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-teal-700">
+            Contact person
+          </p>
+          <p className="mt-2 text-base font-black text-slate-800">
+            {institution.position}
           </p>
         </div>
+        <div className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-teal-700">
+            Phone
+          </p>
+          <p className="mt-2 text-3xl font-black tracking-tight text-red-700">
+            {institution.phone}
+          </p>
+        </div>
+        {institution.alternative && (
+          <div className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-teal-700">
+              Alternative
+            </p>
+            <p className="mt-2 text-xl font-black text-slate-800">
+              {institution.alternative}
+            </p>
           </div>
-          <aside className="flex flex-col justify-center bg-gradient-to-br from-red-50 via-white to-teal-50 p-6 sm:p-8">
+        )}
+        {institution.email && (
+        <div className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-teal-700">
+            Email
+          </p>
+          <p className="mt-2 break-words text-base font-bold text-slate-700">
+            {institution.email}
+          </p>
+        </div>
+        )}
+      </div>
+
+      <div className="mt-auto grid gap-3 pt-6 sm:grid-cols-2">
+        <a
+          href={telHref}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-red-600 px-5 text-center text-sm font-black text-white shadow-lg shadow-red-700/20 transition hover:bg-red-700 active:scale-[0.98]"
+        >
+          <PhoneIcon />
+          Call Hospital
+        </a>
+        {institution.email && (
+        <a
+          href={mailHref}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-teal-200 bg-white px-5 text-center text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
+        >
+          <MailIcon />
+          Send Email
+        </a>
+        )}
+        <button
+          type="button"
+          onClick={() => onViewDetails(institution)}
+          className={`inline-flex min-h-12 items-center justify-center rounded-xl border border-teal-200 bg-teal-50 px-5 text-center text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-100 active:scale-[0.98] ${
+            institution.email ? "sm:col-span-2" : ""
+          }`}
+        >
+          View Details
+        </button>
+      </div>
+    </article>
+  );
+}
+
+export default function EmergencyPage() {
+  const [selectedInstitution, setSelectedInstitution] = useState(null);
+
+  function scrollToSection(target) {
+    document.getElementById(target)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  return (
+    <div className="space-y-6 pb-24 md:pb-0">
+      <section className="overflow-hidden rounded-3xl border border-teal-100 bg-white shadow-xl shadow-teal-900/5">
+        <div className="grid gap-0 lg:grid-cols-[1.45fr_0.55fr]">
+          <div className="p-5 sm:p-6">
+            <Link
+              href="/dashboard"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-teal-100 bg-white px-4 text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
+            >
+              <ArrowLeftIcon />
+              Back to Dashboard
+            </Link>
+            <div className="mt-5 max-w-4xl">
+              <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-700">
+                Emergency contacts
+              </p>
+              <h1 className="mt-2 text-3xl font-black tracking-tight text-[#0d4050] sm:text-4xl lg:text-5xl">
+                Emergency & Urgent Care Guidance
+              </h1>
+              <p className="mt-3 text-base font-semibold leading-7 text-slate-600">
+                Get key emergency contact numbers and urgent support options in Sri Lanka.
+              </p>
+            </div>
+          </div>
+          <aside className="flex flex-col justify-center bg-gradient-to-br from-red-50 via-white to-teal-50 p-5 sm:p-6">
             <p className="text-sm font-black uppercase tracking-[0.18em] text-red-700">
               Life-threatening emergency
             </p>
-            <p className="mt-3 text-5xl font-black tracking-tight text-red-700">1990</p>
-            <p className="mt-3 text-base font-semibold leading-7 text-slate-700">
-              Call the free ambulance service first if someone needs urgent medical help.
+            <p className="mt-2 text-4xl font-black tracking-tight text-red-700">1990</p>
+            <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">
+              Recommended first call for medical emergencies.
             </p>
-            <div className="mt-5">
-              <CallButton call={{ label: "Call 1990 Now", href: "tel:1990" }} featured />
+            <div className="mt-4">
+              <CallButton
+                call={{ label: "Call 1990 Now", href: "tel:1990" }}
+                featured
+                pulse
+              />
             </div>
           </aside>
         </div>
       </section>
+
+      <nav
+        aria-label="Emergency quick access"
+        className="rounded-3xl border border-teal-100 bg-white p-4 shadow-xl shadow-teal-900/5"
+      >
+        <div className="flex flex-wrap gap-3">
+          {quickAccessItems.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => scrollToSection(item.target)}
+              className="min-h-11 rounded-full border border-teal-200 bg-teal-50 px-4 text-sm font-black text-teal-700 transition hover:bg-teal-100 active:scale-[0.98]"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </nav>
 
       <section className="grid items-stretch gap-5 lg:grid-cols-2">
         {emergencySections.map((section) => (
@@ -276,24 +471,140 @@ export default function EmergencyPage() {
         ))}
       </section>
 
+      <section
+        id="specialized-hospitals"
+        className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8"
+      >
+        <div className="max-w-3xl">
+          <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-700">
+            National care access
+          </p>
+          <h2 className="mt-3 text-3xl font-black tracking-tight text-[#0d4050] sm:text-4xl">
+            Specialized National Healthcare Institutions
+          </h2>
+          <p className="mt-3 text-base font-semibold leading-7 text-slate-600">
+            Quick access to major national healthcare institutions in Sri Lanka.
+          </p>
+        </div>
+
+        <div className="mt-7 grid items-stretch gap-5 md:grid-cols-2 2xl:grid-cols-3">
+          {specializedInstitutions.map((institution) => (
+            <InstitutionCard
+              key={institution.hospital}
+              institution={institution}
+              onViewDetails={setSelectedInstitution}
+            />
+          ))}
+        </div>
+      </section>
+
       <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
         <h2 className="text-2xl font-black text-[#0d4050]">
-          Need location-specific emergency care?
+          Need emergency care near you?
         </h2>
         <p className="mt-3 text-base font-semibold leading-7 text-slate-600">
-          If you know your nearest major city or town, Mediora can help guide you toward
-          private hospitals or local emergency care options in your area when backend
-          location services are added.
+          Location-based emergency hospital recommendations will be available in future
+          updates.
         </p>
       </section>
 
       <section className="rounded-3xl border border-amber-200 bg-amber-50 p-5 shadow-lg shadow-amber-900/5">
+        <p className="mb-3 text-sm font-black text-amber-900">
+          Emergency information last reviewed: June 2026
+        </p>
         <p className="text-sm font-black leading-6 text-amber-800">
           This feature provides general emergency contact information only. If you are
           experiencing a life-threatening emergency, call emergency services immediately or
           go to the nearest hospital.
         </p>
       </section>
+
+      {selectedInstitution && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/40 p-4 backdrop-blur-sm sm:items-center">
+          <section className="w-full max-w-xl rounded-3xl bg-white p-6 shadow-2xl shadow-slate-950/20 sm:p-8">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-teal-700">
+                  Institution details
+                </p>
+                <h2 className="mt-2 text-2xl font-black leading-tight text-[#0d4050]">
+                  {selectedInstitution.hospital}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedInstitution(null)}
+                className="min-h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 transition hover:bg-slate-50"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              {[
+                ["Position / Contact person", selectedInstitution.position],
+                ["Phone number", selectedInstitution.phone],
+                selectedInstitution.alternative
+                  ? ["Alternative number", selectedInstitution.alternative]
+                  : null,
+                selectedInstitution.email
+                  ? ["Email address", selectedInstitution.email]
+                  : null,
+                selectedInstitution.category
+                  ? ["Care category", selectedInstitution.category]
+                  : null,
+              ]
+                .filter(Boolean)
+                .map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4"
+                  >
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-teal-700">
+                      {label}
+                    </p>
+                    <p className="mt-2 break-words text-base font-bold text-slate-800">
+                      {value}
+                    </p>
+                  </div>
+                ))}
+            </div>
+
+            <p className="mt-5 rounded-2xl border border-teal-100 bg-teal-50/70 p-4 text-base font-semibold leading-7 text-slate-700">
+              Detailed hospital information will be available in future updates.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <a
+                href={`tel:${selectedInstitution.phone.replaceAll(" ", "")}`}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-red-600 px-5 text-center text-sm font-black text-white shadow-lg shadow-red-700/20 transition hover:bg-red-700 active:scale-[0.98]"
+              >
+                <PhoneIcon />
+                Call Hospital
+              </a>
+              {selectedInstitution.email && (
+                <a
+                  href={`mailto:${selectedInstitution.email}`}
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-teal-200 bg-white px-5 text-center text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
+                >
+                  <MailIcon />
+                  Send Email
+                </a>
+              )}
+            </div>
+          </section>
+        </div>
+      )}
+
+      <div className="fixed inset-x-4 bottom-4 z-40 md:hidden">
+        <a
+          href="tel:1990"
+          className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-red-600 px-5 text-base font-black text-white shadow-2xl shadow-red-900/25 transition active:scale-[0.98] motion-safe:animate-pulse"
+        >
+          <PhoneIcon />
+          Call 1990
+        </a>
+      </div>
     </div>
   );
 }
