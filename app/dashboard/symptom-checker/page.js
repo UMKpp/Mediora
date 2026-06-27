@@ -221,7 +221,7 @@ export default function SymptomCheckerPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
-  const [analysisProgress, setAnalysisProgress] = useState([0, 0, 0]);
+  const [analysisProgress, setAnalysisProgress] = useState([96, 96, 96]);
 
   const filteredSymptoms = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -245,32 +245,16 @@ export default function SymptomCheckerPage() {
       return undefined;
     }
 
-    let activeIndex = 0;
     const progressTimer = setInterval(() => {
       setAnalysisProgress((currentProgress) => {
-        const nextProgress = [...currentProgress];
-
-        if (activeIndex >= nextProgress.length) {
+        if (currentProgress.every((progress) => progress === 100)) {
           clearInterval(progressTimer);
-          return nextProgress;
+          return currentProgress;
         }
 
-        nextProgress[activeIndex] = Math.min(
-          nextProgress[activeIndex] + 4,
-          100
-        );
-
-        if (nextProgress[activeIndex] === 100) {
-          activeIndex += 1;
-        }
-
-        if (activeIndex >= nextProgress.length) {
-          clearInterval(progressTimer);
-        }
-
-        return nextProgress;
+        return currentProgress.map((progress) => Math.min(progress + 1, 100));
       });
-    }, 80);
+    }, 260);
 
     return () => clearInterval(progressTimer);
   }, [currentStep]);
@@ -284,7 +268,7 @@ export default function SymptomCheckerPage() {
   }
 
   function startAnalysis() {
-    setAnalysisProgress([0, 0, 0]);
+    setAnalysisProgress([96, 96, 96]);
     setCurrentStep(3);
   }
 
@@ -490,9 +474,7 @@ export default function SymptomCheckerPage() {
           <div className="mt-7 grid gap-5 md:grid-cols-3">
             {analysisCards.map((card, index) => {
               const isComplete = analysisProgress[index] === 100;
-              const isLoading =
-                !isComplete &&
-                analysisProgress.slice(0, index).every((progress) => progress === 100);
+              const isLoading = !isComplete;
 
               return (
                 <div
@@ -505,7 +487,7 @@ export default function SymptomCheckerPage() {
                       <span className="absolute inset-0 rounded-full border-2 border-teal-100" />
                       <span
                         className={`absolute inset-1 rounded-full border-2 border-transparent border-t-[#08aa9c] border-r-[#08aa9c] ${
-                          isLoading ? "motion-safe:analysis-ring-spin" : ""
+                          isLoading ? "analysis-ring-spin" : ""
                         }`}
                       />
                       <span className="absolute left-3 top-5 h-2.5 w-2.5 rounded-full bg-teal-400 motion-safe:animate-pulse" />
