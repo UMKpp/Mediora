@@ -18,7 +18,7 @@ const featureCards = [
     title: "Find Doctors",
     description: "Explore nearby medical professionals and prepare for appointments.",
     href: "/dashboard/doctors",
-    icon: "/images/doctor.png",
+    icon: "/images/stethoscope.png",
     cta: "Find Doctors",
     hint: "Recommended for your area",
   },
