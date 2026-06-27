@@ -298,7 +298,6 @@ function ProfileAvatar({ doctor, size = "large" }) {
 }
 
 export default function DoctorsPage() {
-  const [doctorSearch, setDoctorSearch] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("All Provinces");
   const [selectedDistrict, setSelectedDistrict] = useState("All Districts");
   const [selectedSpecialization, setSelectedSpecialization] = useState("All Specializations");
@@ -316,19 +315,10 @@ export default function DoctorsPage() {
   const activeSymptom = selectedSymptom === "All Symptoms" ? "" : selectedSymptom;
 
   const filteredDoctors = useMemo(() => {
-    const query = doctorSearch.trim().toLowerCase();
     const symptomQuery = activeSymptom;
     const mappedSpecializations = symptomSpecializationMap[symptomQuery] || [];
 
     return doctors.filter((doctor) => {
-      const matchesSearch =
-        query.length === 0 ||
-        doctor.name.toLowerCase().includes(query) ||
-        doctor.specialization.toLowerCase().includes(query) ||
-        doctor.province.toLowerCase().includes(query) ||
-        doctor.district.toLowerCase().includes(query) ||
-        doctor.city.toLowerCase().includes(query) ||
-        doctor.symptoms.some((symptom) => symptom.includes(query));
       const matchesRecommendedSpecialization =
         mappedSpecializations.length === 0 ||
         selectedSpecialization !== "All Specializations" ||
@@ -365,7 +355,6 @@ export default function DoctorsPage() {
       });
 
       return (
-        matchesSearch &&
         matchesRecommendedSpecialization &&
         matchesProvince &&
         matchesDistrict &&
@@ -377,7 +366,6 @@ export default function DoctorsPage() {
   }, [
     activeFilters,
     activeSymptom,
-    doctorSearch,
     selectedDistrict,
     selectedProvince,
     selectedSpecialization,
@@ -432,16 +420,18 @@ export default function DoctorsPage() {
       </section>
 
       <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
-        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[1.1fr_0.95fr_0.9fr_0.95fr_0.9fr_auto] xl:items-end">
+        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[1fr_0.95fr_0.9fr_0.95fr_auto] xl:items-end">
           <label className="block">
-            <span className="text-sm font-black text-slate-900">Optional doctor name search</span>
-            <input
-              type="search"
-              value={doctorSearch}
-              onChange={(event) => setDoctorSearch(event.target.value)}
-              placeholder="Search doctor name..."
-              className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-medium text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
-            />
+            <span className="text-sm font-black text-slate-900">Symptom</span>
+            <select
+              value={selectedSymptom}
+              onChange={(event) => setSelectedSymptom(event.target.value)}
+              className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-bold text-slate-700 shadow-sm outline-none transition focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
+            >
+              {symptomOptions.map((symptom) => (
+                <option key={symptom}>{symptom}</option>
+              ))}
+            </select>
           </label>
 
           <label className="block">
@@ -483,19 +473,6 @@ export default function DoctorsPage() {
             </select>
           </label>
 
-          <label className="block">
-            <span className="text-sm font-black text-slate-900">Symptom</span>
-            <select
-              value={selectedSymptom}
-              onChange={(event) => setSelectedSymptom(event.target.value)}
-              className="mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base font-bold text-slate-700 shadow-sm outline-none transition focus:border-teal-400 focus:ring-4 focus:ring-teal-100"
-            >
-              {symptomOptions.map((symptom) => (
-                <option key={symptom}>{symptom}</option>
-              ))}
-            </select>
-          </label>
-
           <button
             type="button"
             className="min-h-12 rounded-xl bg-[#08aa9c] px-6 text-sm font-black text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#07998c] active:scale-[0.98]"
@@ -533,11 +510,11 @@ export default function DoctorsPage() {
       <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
         <section>
           {filteredDoctors.length > 0 ? (
-            <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
+            <div className="grid items-stretch gap-5 md:grid-cols-2 2xl:grid-cols-3">
               {filteredDoctors.map((doctor) => (
                 <article
                   key={doctor.id}
-                  className="rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10"
+                  className="flex h-full min-h-[452px] flex-col rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10"
                 >
                   <div className="flex items-start gap-4">
                     <ProfileAvatar doctor={doctor} />
@@ -584,17 +561,17 @@ export default function DoctorsPage() {
                     ))}
                   </div>
 
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <div className="mt-auto grid gap-3 pt-6 sm:grid-cols-2">
                     <button
                       type="button"
                       onClick={() => setSelectedDoctor(doctor)}
-                      className="min-h-11 rounded-xl bg-[#08aa9c] px-4 text-sm font-black text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#07998c] active:scale-[0.98]"
+                      className="flex h-12 items-center justify-center rounded-xl bg-[#08aa9c] px-4 text-center text-sm font-black leading-5 text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#07998c] active:scale-[0.98]"
                     >
-                      View Profile
+                      View
                     </button>
                     <a
                       href={`tel:${doctor.phone.replaceAll(" ", "")}`}
-                      className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-200 bg-white px-4 text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
+                      className="inline-flex h-12 items-center justify-center rounded-xl border border-teal-200 bg-white px-4 text-center text-sm font-black leading-5 text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
                     >
                       Contact
                     </a>
