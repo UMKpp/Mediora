@@ -386,7 +386,7 @@ export default function DoctorsPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
+      <section className="rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5 sm:p-8">
         <Link
           href="/dashboard"
           className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-teal-100 bg-white px-4 text-sm font-black text-teal-700 shadow-sm transition hover:bg-teal-50 active:scale-[0.98]"
@@ -396,7 +396,7 @@ export default function DoctorsPage() {
         </Link>
 
         <div className="mt-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
+          <div className="min-w-0 max-w-2xl">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-teal-700">
               Mediora Care Network
             </p>
@@ -419,7 +419,7 @@ export default function DoctorsPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
+      <section className="rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5 sm:p-8">
         <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[1fr_0.95fr_0.9fr_0.95fr_auto] xl:items-end">
           <label className="block">
             <span className="text-sm font-black text-slate-900">Symptom</span>
@@ -514,7 +514,7 @@ export default function DoctorsPage() {
               {filteredDoctors.map((doctor) => (
                 <article
                   key={doctor.id}
-                  className="flex h-full min-h-[452px] flex-col rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10"
+                  className="flex h-full flex-col rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5 transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-900/10 sm:min-h-[452px]"
                 >
                   <div className="flex items-start gap-4">
                     <ProfileAvatar doctor={doctor} />
@@ -614,15 +614,15 @@ export default function DoctorsPage() {
       </div>
 
       {selectedDoctor && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/40 p-4 backdrop-blur-sm sm:items-center">
-          <section className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl shadow-slate-950/20 sm:p-8">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/40 p-3 backdrop-blur-sm sm:items-center sm:p-4">
+          <section className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl shadow-slate-950/20 sm:p-8">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
               <ProfileAvatar doctor={selectedDoctor} size="modal" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-teal-700">
                   Doctor Profile
                 </p>
-                <h2 className="mt-2 text-3xl font-black text-[#0d4050]">
+                <h2 className="mt-2 text-2xl font-black text-[#0d4050] sm:text-3xl">
                   {selectedDoctor.name}
                 </h2>
                 <p className="mt-2 text-base font-black text-teal-700">
