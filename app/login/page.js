@@ -120,8 +120,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f5fbfa] p-4 text-slate-900 sm:p-6 lg:p-12">
-      <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
+    <main className="flex min-h-screen items-center justify-center overflow-x-hidden bg-[#f5fbfa] p-3 text-slate-900 sm:p-6 lg:p-12">
+      <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-3xl bg-white shadow-2xl shadow-slate-200/80 sm:rounded-[2rem] lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
         <div className="hidden items-center justify-center bg-[#f1fbf8] p-3 md:flex lg:p-5">
           <section className="relative flex aspect-[3/4] w-full max-w-[620px] flex-col overflow-hidden rounded-[2rem] border border-teal-100 bg-gradient-to-b from-[#dcfbf4] via-[#f7fffc] to-white p-7 shadow-2xl shadow-teal-900/10 lg:p-9">
             <div
@@ -215,8 +215,8 @@ export default function LoginPage() {
           </section>
         </div>
 
-        <div className="flex items-center justify-center px-5 py-10 sm:px-8 lg:px-16">
-          <section className="w-full max-w-[480px] rounded-[1.75rem] bg-white px-7 py-8 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:px-10 sm:py-9">
+        <div className="flex min-w-0 items-center justify-center px-3 py-7 sm:px-8 sm:py-10 lg:px-16">
+          <section className="w-full max-w-[480px] rounded-3xl bg-white px-5 py-7 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:rounded-[1.75rem] sm:px-10 sm:py-9">
             <div className="flex justify-center">
               <Image
                 src="/images/mediora_textlogo.png"
@@ -229,7 +229,7 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center">
-              <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#0d4050]">
+              <h1 className="mt-3 text-2xl font-bold tracking-tight text-[#0d4050] sm:text-3xl">
                 Welcome Back
               </h1>
               <p className="mx-auto mt-3 max-w-sm text-base font-medium leading-6 text-slate-500">
@@ -313,7 +313,7 @@ export default function LoginPage() {
 
               <button
                 type="button"
-                className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 text-base font-bold text-slate-900 shadow-sm transition hover:border-teal-200 hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-100"
+                className="flex min-h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2 text-base font-bold text-slate-900 shadow-sm transition hover:border-teal-200 hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-100"
               >
                 <Image
                   src="/images/circle-g.png"
