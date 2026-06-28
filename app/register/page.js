@@ -107,10 +107,10 @@ export default function RegisterPage() {
     confirmPassword.length > 0 && password !== confirmPassword;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f5fbfa] p-4 text-slate-950 sm:p-6 lg:p-12">
-      <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-[2rem] bg-white shadow-2xl shadow-slate-200/80 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
-        <div className="flex items-center justify-center px-5 py-10 sm:px-8 lg:px-16">
-          <section className="w-full max-w-[480px] rounded-[1.75rem] bg-white px-7 py-8 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:px-10 sm:py-9">
+    <main className="flex min-h-screen items-center justify-center overflow-x-hidden bg-[#f5fbfa] p-3 text-slate-950 sm:p-6 lg:p-12">
+      <section className="mx-auto grid w-full max-w-[1440px] overflow-hidden rounded-3xl bg-white shadow-2xl shadow-slate-200/80 sm:rounded-[2rem] lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.98fr_1.12fr]">
+        <div className="flex min-w-0 items-center justify-center px-3 py-7 sm:px-8 sm:py-10 lg:px-16">
+          <section className="w-full max-w-[480px] rounded-3xl bg-white px-5 py-7 shadow-2xl shadow-slate-300/45 ring-1 ring-slate-100 sm:rounded-[1.75rem] sm:px-10 sm:py-9">
             <div className="flex justify-center">
               <Image
                 src="/images/mediora_textlogo.png"
@@ -123,7 +123,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-3 text-center">
-              <h1 className="text-3xl font-bold tracking-tight text-[#0d4050]">
+              <h1 className="text-2xl font-bold tracking-tight text-[#0d4050] sm:text-3xl">
                 Create <span className="text-teal-600">your account</span>
               </h1>
               <p className="mx-auto mt-3 max-w-sm text-base font-medium leading-6 text-slate-500">
