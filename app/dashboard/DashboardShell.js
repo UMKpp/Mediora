@@ -193,20 +193,22 @@ export default function DashboardShell({ children }) {
 
       <div className="lg:pl-72">
         <header className="sticky top-0 z-20 border-b border-teal-100 bg-white/95 backdrop-blur">
-          <div className="flex min-h-20 items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex min-h-20 items-center justify-between gap-3 px-3 py-4 sm:px-6 lg:px-8">
             <div className="min-w-0">
-              <p className="text-sm font-bold text-teal-700">Welcome back, Mediora user</p>
+              <p className="truncate text-xs font-bold text-teal-700 sm:text-sm">
+                Welcome back, Mediora user
+              </p>
               <h1 className="truncate text-2xl font-black tracking-tight text-[#0d4050] sm:text-3xl">
                 {title}
               </h1>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-bold text-slate-900">Patient Account</p>
                 <p className="text-xs font-semibold text-slate-500">Personal dashboard</p>
               </div>
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-teal-100 text-sm font-black text-teal-800 ring-4 ring-white">
+              <div className="hidden h-11 w-11 shrink-0 place-items-center rounded-full bg-teal-100 text-sm font-black text-teal-800 ring-4 ring-white min-[380px]:grid">
                 MU
               </div>
               <button
@@ -253,7 +255,7 @@ export default function DashboardShell({ children }) {
           )}
         </header>
 
-        <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
           {children}
         </main>
       </div>
