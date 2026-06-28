@@ -114,7 +114,7 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f4fbfa] text-slate-950">
       <header className="sticky top-0 z-30 border-b border-teal-100/70 bg-white/90 backdrop-blur">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-8 sm:py-4">
           <Link
             href="/"
             className="flex items-center gap-3 rounded-xl transition duration-300 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-teal-200"
@@ -125,7 +125,7 @@ export default function Home() {
               width={120}
               height={87}
               priority
-              className="h-auto w-24"
+              className="h-auto w-20 sm:w-24"
             />
           </Link>
 
@@ -145,16 +145,16 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-100 bg-white px-4 py-2 text-sm font-bold text-teal-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-teal-300 hover:bg-teal-50 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-teal-100 active:scale-[0.98]"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-100 bg-white px-3 py-2 text-sm font-bold text-teal-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-teal-300 hover:bg-teal-50 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-teal-100 active:scale-[0.98] sm:px-4"
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#08aa9c] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-teal-600/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#07998c] hover:shadow-xl hover:shadow-teal-700/25 focus:outline-none focus:ring-4 focus:ring-teal-200 active:scale-[0.98]"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#08aa9c] px-3 py-2 text-sm font-bold text-white shadow-lg shadow-teal-600/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#07998c] hover:shadow-xl hover:shadow-teal-700/25 focus:outline-none focus:ring-4 focus:ring-teal-200 active:scale-[0.98] sm:px-4"
             >
               Get Started
             </Link>
@@ -162,15 +162,15 @@ export default function Home() {
         </nav>
       </header>
 
-      <section className="reveal-on-scroll mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[1fr_0.95fr] lg:py-20">
-        <div>
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-700">
+      <section className="reveal-on-scroll mx-auto grid max-w-7xl items-center gap-8 px-4 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1fr_0.95fr] lg:gap-10 lg:py-20">
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-teal-700 sm:text-sm sm:tracking-[0.22em]">
             Mediora Healthcare
           </p>
-          <h1 className="mt-5 max-w-3xl text-5xl font-black leading-tight tracking-tight text-[#0d4050] sm:text-6xl">
+          <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight tracking-tight text-[#0d4050] sm:mt-5 sm:text-5xl lg:text-6xl">
             Your Digital Healthcare Companion
           </h1>
-          <p className="mt-6 max-w-2xl text-lg font-medium leading-8 text-slate-600">
+          <p className="mt-5 max-w-2xl text-base font-medium leading-7 text-slate-600 sm:mt-6 sm:text-lg sm:leading-8">
             Mediora helps users check symptoms, find nearby doctors and
             pharmacies, and access emergency medical guidance in one secure
             platform.
@@ -191,12 +191,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="w-full">
+        <div className="min-w-0 w-full">
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
             aria-label={`Play ${selectedFeature.title} preview`}
-            className="group relative block aspect-square w-full overflow-hidden rounded-[2rem] border border-teal-100 bg-white shadow-2xl shadow-teal-900/10 transition duration-500 hover:-translate-y-1 hover:border-teal-300 hover:shadow-[0_28px_70px_rgba(13,148,136,0.24)] focus:outline-none focus:ring-4 focus:ring-teal-200"
+            className="group relative block aspect-square w-full overflow-hidden rounded-3xl border border-teal-100 bg-white shadow-2xl shadow-teal-900/10 transition duration-500 hover:-translate-y-1 hover:border-teal-300 hover:shadow-[0_28px_70px_rgba(13,148,136,0.24)] focus:outline-none focus:ring-4 focus:ring-teal-200 sm:rounded-[2rem]"
           >
             <video
               key={selectedFeature.video}
@@ -209,22 +209,22 @@ export default function Home() {
               preload="metadata"
             />
             <span className="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-teal-500/10" />
-            <span className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-4 rounded-2xl border border-white/25 bg-white/90 p-4 text-left shadow-lg backdrop-blur transition duration-300 group-hover:bg-white">
-              <span>
+            <span className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-3 rounded-2xl border border-white/25 bg-white/90 p-3 text-left shadow-lg backdrop-blur transition duration-300 group-hover:bg-white sm:bottom-5 sm:left-5 sm:right-5 sm:gap-4 sm:p-4">
+              <span className="min-w-0">
                 <span className="block text-xs font-black uppercase tracking-[0.18em] text-teal-700">
                   Preview
                 </span>
-                <span className="mt-1 block text-lg font-black text-[#0d4050]">
+                <span className="mt-1 block text-base font-black text-[#0d4050] sm:text-lg">
                   {selectedFeature.title}
                 </span>
               </span>
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-red-600 text-white shadow-lg shadow-red-700/25 transition duration-300 group-hover:scale-110">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-red-600 text-white shadow-lg shadow-red-700/25 transition duration-300 group-hover:scale-110 sm:h-12 sm:w-12">
                 <PlayIcon />
               </span>
             </span>
           </button>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:mt-5 sm:grid-cols-4">
             {features.map((feature, index) => (
               <button
                 key={feature.title}
@@ -244,7 +244,7 @@ export default function Home() {
       </section>
 
       <section id="features" className="bg-white py-16">
-        <div className="reveal-on-scroll mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="reveal-on-scroll mx-auto max-w-7xl px-4 sm:px-8">
           <div className="max-w-2xl">
             <h2 className="text-3xl font-black tracking-tight text-[#0d4050] sm:text-4xl">
               Unlock the Full Mediora Experience
@@ -301,11 +301,11 @@ export default function Home() {
       </section>
 
       <section id="about" className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
-        <div className="reveal-on-scroll rounded-[2rem] bg-gradient-to-br from-teal-700 via-[#08aa9c] to-emerald-600 px-6 py-10 text-white shadow-2xl shadow-teal-900/15 transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(13,148,136,0.24)] sm:px-10 lg:px-14">
-          <h2 className="text-3xl font-black tracking-tight sm:text-4xl">
+        <div className="reveal-on-scroll rounded-3xl bg-gradient-to-br from-teal-700 via-[#08aa9c] to-emerald-600 px-5 py-8 text-white shadow-2xl shadow-teal-900/15 transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(13,148,136,0.24)] sm:rounded-[2rem] sm:px-10 sm:py-10 lg:px-14">
+          <h2 className="text-2xl font-black tracking-tight sm:text-4xl">
             Why Mediora?
           </h2>
-          <p className="mt-5 max-w-3xl text-lg font-medium leading-8 text-teal-50">
+          <p className="mt-4 max-w-3xl text-base font-medium leading-7 text-teal-50 sm:mt-5 sm:text-lg sm:leading-8">
             Mediora is designed for trusted healthcare access, fast guidance,
             and a simple user-friendly experience. It brings symptom support,
             location-based care discovery, pharmacy access, and emergency
@@ -320,29 +320,29 @@ export default function Home() {
 
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/70 p-3 backdrop-blur-sm sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-label={`${selectedFeature.title} video preview`}
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="w-full max-w-3xl rounded-[2rem] border border-teal-100 bg-white p-4 shadow-2xl shadow-slate-950/30 sm:p-5"
+            className="my-auto w-full max-w-3xl rounded-3xl border border-teal-100 bg-white p-3 shadow-2xl shadow-slate-950/30 sm:rounded-[2rem] sm:p-5"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div>
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div className="min-w-0">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-teal-700">
                   Mediora feature preview
                 </p>
-                <h2 className="mt-1 text-xl font-black text-[#0d4050]">
+                <h2 className="mt-1 text-lg font-black text-[#0d4050] sm:text-xl">
                   {selectedFeature.title}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-teal-300 hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-100 active:scale-[0.98]"
+                className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-black text-slate-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-teal-300 hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-100 active:scale-[0.98] sm:px-4"
               >
                 <CloseIcon />
                 Close
@@ -351,7 +351,7 @@ export default function Home() {
             <video
               key={`modal-${selectedFeature.video}`}
               src={selectedFeature.video}
-              className="aspect-square w-full rounded-[1.5rem] border border-teal-100 bg-slate-950 object-cover shadow-xl shadow-teal-900/10"
+              className="aspect-square max-h-[72vh] w-full rounded-2xl border border-teal-100 bg-slate-950 object-cover shadow-xl shadow-teal-900/10 sm:rounded-[1.5rem]"
               muted
               autoPlay
               loop
