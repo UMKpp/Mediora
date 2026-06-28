@@ -75,6 +75,19 @@ input:-webkit-autofill:active {
   }
 }
 
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .analysis-live-card {
   animation:
     analysis-card-in 0.55s ease-out both var(--analysis-delay, 0ms),
@@ -92,5 +105,11 @@ input:-webkit-autofill:active {
 
   .analysis-ring-spin {
     animation: none;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
