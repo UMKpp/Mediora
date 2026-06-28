@@ -72,7 +72,7 @@ export default function DashboardPage() {
   const gridClass = simpleMode
     ? "grid items-stretch gap-6 md:grid-cols-2"
     : "grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4";
-  const featureCardHeight = simpleMode ? "min-h-[268px]" : "min-h-[292px]";
+  const featureCardHeight = simpleMode ? "sm:min-h-[268px]" : "sm:min-h-[292px]";
   const eyebrowText = olderAdultText ? "text-base" : "text-sm";
   const helperText = olderAdultText ? "text-base leading-7" : "text-sm";
   const bodyText = olderAdultText ? "text-lg leading-8" : "text-base leading-7";
@@ -133,7 +133,7 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid gap-5 lg:grid-cols-[1.5fr_0.85fr]">
-        <div className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
+        <div className="min-w-0 rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5 sm:p-8">
           <p className={`${eyebrowText} font-black uppercase tracking-[0.2em] text-teal-700`}>
             Health tools
           </p>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <aside className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
+        <aside className="min-w-0 rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5 sm:p-8">
           <p className={`${eyebrowText} font-black uppercase tracking-[0.2em] text-teal-700`}>
             New here?
           </p>
@@ -202,7 +202,7 @@ export default function DashboardPage() {
                     className="h-8 w-8 animate-pulse object-contain transition group-hover:invert"
                   />
                 </span>
-                <span className={`rounded-full bg-teal-50 px-3 py-1 font-black leading-5 text-teal-700 ${olderAdultText ? "text-sm" : "text-xs"}`}>
+                <span className={`max-w-[11rem] rounded-full bg-teal-50 px-3 py-1 text-right font-black leading-5 text-teal-700 ${olderAdultText ? "text-sm" : "text-xs"}`}>
                   {card.hint}
                 </span>
               </div>
