@@ -19,15 +19,36 @@ const emergencySections = [
     id: "police",
     title: "General Emergency & Police Assistance",
     eyebrow: "National emergency lines",
-    description: "Use these national hotlines for urgent emergency, police, ambulance, fire, and rescue support.",
-    hotlines: [
-      "119 or 118 - Police Emergency Hotline",
-      "110 - Ambulance / Fire & Rescue",
-    ],
-    calls: [
-      { label: "Call 119", href: "tel:119" },
-      { label: "Call 118", href: "tel:118" },
-      { label: "Call 110", href: "tel:110" },
+    description:
+      "Use these national hotlines for urgent emergency, police, fire, rescue, mental health, and health guidance support.",
+    emergencyServices: [
+      {
+        name: "Sri Lanka Police",
+        description:
+          "Public safety emergencies, accidents, and emergency coordination.",
+        call: { label: "Call 119", href: "tel:119" },
+      },
+      {
+        name: "Ministry of Defence / National Help Desk",
+        description:
+          "National emergencies, disaster response, and large-scale rescue operations.",
+        call: { label: "Call 118", href: "tel:118" },
+      },
+      {
+        name: "Fire & Rescue Service",
+        description: "Emergency physical rescue from accidents or fire hazards.",
+        call: { label: "Call 110", href: "tel:110" },
+      },
+      {
+        name: "National Mental Health Helpline",
+        description: "24/7 psychiatric support and crisis intervention.",
+        call: { label: "Call 1926", href: "tel:1926" },
+      },
+      {
+        name: "Trilingual Health Line",
+        description: "General health guidance and healthcare information.",
+        call: { label: "Call 1999", href: "tel:1999" },
+      },
     ],
   },
 ];
@@ -166,13 +187,13 @@ function MailIcon() {
   );
 }
 
-function CallButton({ call, featured = false, pulse = false }) {
+function CallButton({ call, featured = false, pulse = false, compact = false }) {
   return (
     <a
       href={call.href}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-red-600 px-5 text-center font-black text-white shadow-lg shadow-red-700/20 transition hover:bg-red-700 active:scale-[0.98] ${
+      className={`inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-red-600 px-5 text-center font-black text-white shadow-lg shadow-red-700/20 transition hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-red-700/30 active:scale-[0.98] ${
         featured ? "text-base sm:text-lg" : "text-sm"
-      } ${pulse ? "motion-safe:animate-pulse" : ""}`}
+      } ${compact ? "w-full sm:w-auto" : ""} ${pulse ? "motion-safe:animate-pulse" : ""}`}
     >
       <PhoneIcon />
       {call.label}
@@ -182,9 +203,9 @@ function CallButton({ call, featured = false, pulse = false }) {
 
 function ContactCard({ section }) {
   const buttonGridClass =
-    section.calls.length >= 3
+    section.calls?.length >= 3
       ? "grid gap-3 sm:grid-cols-2"
-      : section.calls.length === 2
+      : section.calls?.length === 2
         ? "grid gap-3 sm:grid-cols-2"
         : "grid gap-3";
 
@@ -266,6 +287,27 @@ function ContactCard({ section }) {
         </div>
       )}
 
+      {section.emergencyServices && (
+        <div className="mt-5 grid gap-3">
+          {section.emergencyServices.map((service) => (
+            <div
+              key={service.name}
+              className="flex flex-col gap-4 rounded-2xl border border-teal-100 bg-[#fbfdfd] p-5 shadow-sm shadow-teal-900/5 transition hover:-translate-y-0.5 hover:border-teal-300 hover:bg-teal-50/40 hover:shadow-md hover:shadow-teal-900/10 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="min-w-0">
+                <h3 className="text-lg font-black leading-6 text-[#0d4050]">
+                  {service.name}
+                </h3>
+                <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
+                  {service.description}
+                </p>
+              </div>
+              <CallButton call={service.call} compact />
+            </div>
+          ))}
+        </div>
+      )}
+
       {section.hospitals && (
         <div className="mt-5 grid gap-3">
           {section.hospitals.map((hospital) => (
@@ -294,11 +336,13 @@ function ContactCard({ section }) {
         </div>
       )}
 
-      <div className={`mt-auto pt-6 ${buttonGridClass}`}>
-        {section.calls.map((call) => (
-          <CallButton key={call.href} call={call} featured={section.calls.length === 1} />
-        ))}
-      </div>
+      {section.calls && (
+        <div className={`mt-auto pt-6 ${buttonGridClass}`}>
+          {section.calls.map((call) => (
+            <CallButton key={call.href} call={call} featured={section.calls.length === 1} />
+          ))}
+        </div>
+      )}
       </div>
     </article>
   );
