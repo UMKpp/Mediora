@@ -517,13 +517,13 @@ export default function EmergencyPage() {
 
       <section
         id="specialized-hospitals"
-        className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8"
+        className="rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5 sm:p-8"
       >
         <div className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.22em] text-teal-700">
             National care access
           </p>
-          <h2 className="mt-3 text-3xl font-black tracking-tight text-[#0d4050] sm:text-4xl">
+          <h2 className="mt-3 text-2xl font-black tracking-tight text-[#0d4050] sm:text-4xl">
             Specialized National Healthcare Institutions
           </h2>
           <p className="mt-3 text-base font-semibold leading-7 text-slate-600">
@@ -542,7 +542,7 @@ export default function EmergencyPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
+      <section className="rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5 sm:p-8">
         <h2 className="text-2xl font-black text-[#0d4050]">
           Need emergency care near you?
         </h2>
@@ -564,10 +564,10 @@ export default function EmergencyPage() {
       </section>
 
       {selectedInstitution && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/40 p-4 backdrop-blur-sm sm:items-center">
-          <section className="w-full max-w-xl rounded-3xl bg-white p-6 shadow-2xl shadow-slate-950/20 sm:p-8">
-            <div className="flex items-start justify-between gap-4">
-              <div>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/40 p-3 backdrop-blur-sm sm:items-center sm:p-4">
+          <section className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl shadow-slate-950/20 sm:p-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
                 <p className="text-sm font-black uppercase tracking-[0.18em] text-teal-700">
                   Institution details
                 </p>
@@ -578,7 +578,7 @@ export default function EmergencyPage() {
               <button
                 type="button"
                 onClick={() => setSelectedInstitution(null)}
-                className="min-h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 transition hover:bg-slate-50"
+                className="min-h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 transition hover:bg-slate-50 sm:shrink-0"
               >
                 Close
               </button>
