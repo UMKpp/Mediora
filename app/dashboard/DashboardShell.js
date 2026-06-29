@@ -28,6 +28,7 @@ const navigation = [
     iconImage: "/images/alert.png",
   },
   { label: "Profile", href: "/dashboard/profile", icon: "profile" },
+  { label: "Settings", href: "/dashboard/settings", icon: "settings" },
 ];
 
 const pageTitles = {
