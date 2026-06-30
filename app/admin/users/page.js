@@ -1,3 +1,4 @@
+import AdminProtectedPage from "../AdminProtectedPage";
 import { ActionButton, PageIntro, ResponsiveTable, StatusBadge } from "../AdminUI";
 import { users } from "../mockData";
 
@@ -18,24 +19,26 @@ const columns = [
 
 export default function AdminUsersPage() {
   return (
-    <div className="space-y-6">
-      <PageIntro
-        eyebrow="People"
-        title="User Management"
-        description="Review mock patient, doctor, and pharmacy accounts registered in Mediora."
-      />
+    <AdminProtectedPage>
+      <div className="space-y-6">
+        <PageIntro
+          eyebrow="People"
+          title="User Management"
+          description="Review mock patient, doctor, and pharmacy accounts registered in Mediora."
+        />
 
-      <ResponsiveTable
-        columns={columns}
-        rows={users}
-        renderActions={() => (
-          <>
-            <ActionButton>View</ActionButton>
-            <ActionButton>Edit</ActionButton>
-            <ActionButton tone="danger">Deactivate</ActionButton>
-          </>
-        )}
-      />
-    </div>
+        <ResponsiveTable
+          columns={columns}
+          rows={users}
+          renderActions={() => (
+            <>
+              <ActionButton>View</ActionButton>
+              <ActionButton>Edit</ActionButton>
+              <ActionButton tone="danger">Deactivate</ActionButton>
+            </>
+          )}
+        />
+      </div>
+    </AdminProtectedPage>
   );
 }
