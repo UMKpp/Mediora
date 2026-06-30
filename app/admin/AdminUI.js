@@ -91,6 +91,17 @@ export function StatusBadge({ children, tone = "teal" }) {
 }
 
 export function ResponsiveTable({ columns, rows, renderActions }) {
+  if (rows.length === 0) {
+    return (
+      <div className="rounded-3xl border border-dashed border-teal-200 bg-white p-8 text-center shadow-xl shadow-teal-900/5">
+        <h2 className="text-2xl font-black text-[#0d4050]">No records found.</h2>
+        <p className="mt-3 text-base font-semibold text-slate-600">
+          Try again after changing filters or adding new records.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-hidden rounded-3xl border border-teal-100 bg-white shadow-xl shadow-teal-900/5">
       <div className="hidden overflow-x-auto lg:block">
@@ -147,6 +158,17 @@ export function ResponsiveTable({ columns, rows, renderActions }) {
             )}
           </article>
         ))}
+      </div>
+
+      <div className="border-t border-teal-100 bg-[#fbfdfd] p-4">
+        <p className="text-xs font-black uppercase tracking-[0.14em] text-teal-700">
+          Future table loading state
+        </p>
+        <div className="mt-3 grid gap-2" aria-hidden="true">
+          <div className="mediora-skeleton h-3 w-full rounded-full" />
+          <div className="mediora-skeleton h-3 w-5/6 rounded-full" />
+          <div className="mediora-skeleton h-3 w-2/3 rounded-full" />
+        </div>
       </div>
     </div>
   );
