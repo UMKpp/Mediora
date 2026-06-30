@@ -3,10 +3,9 @@ import { ActionButton, PageIntro, ResponsiveTable } from "../AdminUI";
 import { emergencyServices } from "../mockData";
 
 const columns = [
-  { key: "name", label: "Service / Hospital" },
+  { key: "name", label: "Service Name" },
+  { key: "hotline", label: "Hotline" },
   { key: "type", label: "Type" },
-  { key: "hotline", label: "Hotline Number" },
-  { key: "coverage", label: "Coverage" },
 ];
 
 export default function AdminEmergencyPage() {
@@ -20,7 +19,7 @@ export default function AdminEmergencyPage() {
         />
 
         <div className="flex justify-end">
-          <ActionButton tone="solid">Add</ActionButton>
+          <ActionButton tone="solid">Add New</ActionButton>
         </div>
 
         <ResponsiveTable
