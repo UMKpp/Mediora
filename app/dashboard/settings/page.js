@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { notifyPreferenceChange, TextSizeSelector, ThemeToggle } from "../../ThemeControls";
+import { notifyPreferenceChange, TextSizeSelector } from "../../ThemeControls";
 
 const initialSettings = {
   simpleMode: false,
@@ -219,15 +219,6 @@ export default function SettingsPage() {
           title="Accessibility Settings"
           description="Adjust the dashboard for clearer reading and simpler scanning."
         >
-          <div className="flex flex-col gap-4 rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4 transition hover:border-teal-300 hover:shadow-lg hover:shadow-teal-900/5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0">
-              <h3 className="text-base font-black text-[#0d4050]">Dark Mode</h3>
-              <p className="mt-1 text-sm font-semibold leading-6 text-slate-600">
-                Reduce glare with calm dark slate surfaces for night use.
-              </p>
-            </div>
-            <ThemeToggle />
-          </div>
           <ToggleRow
             label="Simple Mode"
             description="Reduce visual density and make key actions easier to scan."
