@@ -199,7 +199,7 @@ export default function DashboardPage() {
                     alt=""
                     width={32}
                     height={32}
-                    className="h-8 w-8 animate-pulse object-contain transition group-hover:invert"
+                    className="h-8 w-8 object-contain transition group-hover:invert"
                   />
                 </span>
                 <span className={`max-w-[11rem] rounded-full bg-teal-50 px-3 py-1 text-right font-black leading-5 text-teal-700 ${olderAdultText ? "text-sm" : "text-xs"}`}>
@@ -252,9 +252,9 @@ export default function DashboardPage() {
             ))}
 
             <div className="rounded-2xl border border-dashed border-teal-200 bg-teal-50/50 p-4">
-              <div className="h-3 w-28 animate-pulse rounded-full bg-teal-100" />
-              <div className="mt-3 h-3 w-full animate-pulse rounded-full bg-teal-100" />
-              <div className="mt-2 h-3 w-2/3 animate-pulse rounded-full bg-teal-100" />
+              <div className="mediora-skeleton h-3 w-28 rounded-full" />
+              <div className="mediora-skeleton mt-3 h-3 w-full rounded-full" />
+              <div className="mediora-skeleton mt-2 h-3 w-2/3 rounded-full" />
               <p className={`mt-4 font-black text-teal-800 ${buttonText}`}>
                 Backend connections will appear here soon.
               </p>
