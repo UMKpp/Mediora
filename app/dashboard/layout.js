@@ -1,4 +1,4 @@
-import DashboardShell from "./DashboardShell";
+import UserProtectedPage from "./UserProtectedPage";
 
 export const metadata = {
   title: "Mediora Dashboard",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function DashboardLayout({ children }) {
-  return <DashboardShell>{children}</DashboardShell>;
+  return <UserProtectedPage>{children}</UserProtectedPage>;
 }
