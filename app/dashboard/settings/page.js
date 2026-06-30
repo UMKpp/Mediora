@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { notifyPreferenceChange, TextSizeSelector, ThemeToggle } from "../../ThemeControls";
 
 const initialSettings = {
   simpleMode: false,
@@ -117,11 +118,31 @@ function ActionCard({ title, description, buttonText, tone = "teal" }) {
 export default function SettingsPage() {
   const [settings, setSettings] = useState(initialSettings);
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const storedTextSize = window.localStorage.getItem("medioraTextSize");
+
+      if (storedTextSize) {
+        setSettings((current) => ({
+          ...current,
+          textSize: storedTextSize,
+        }));
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   function updateSetting(key, value) {
     setSettings((current) => ({
       ...current,
       [key]: value,
     }));
+
+    if (key === "textSize") {
+      window.localStorage.setItem("medioraTextSize", value);
+      notifyPreferenceChange();
+    }
   }
 
   function toggleSetting(key) {
@@ -198,6 +219,15 @@ export default function SettingsPage() {
           title="Accessibility Settings"
           description="Adjust the dashboard for clearer reading and simpler scanning."
         >
+          <div className="flex flex-col gap-4 rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4 transition hover:border-teal-300 hover:shadow-lg hover:shadow-teal-900/5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <h3 className="text-base font-black text-[#0d4050]">Dark Mode</h3>
+              <p className="mt-1 text-sm font-semibold leading-6 text-slate-600">
+                Reduce glare with calm dark slate surfaces for night use.
+              </p>
+            </div>
+            <ThemeToggle />
+          </div>
           <ToggleRow
             label="Simple Mode"
             description="Reduce visual density and make key actions easier to scan."
@@ -206,21 +236,11 @@ export default function SettingsPage() {
           />
           <div className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
             <h3 className="text-base font-black text-[#0d4050]">Text Size</h3>
-            <div className="mt-3 grid gap-2 min-[420px]:grid-cols-3">
-              {["Small", "Normal", "Large"].map((size) => (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => updateSetting("textSize", size)}
-                  className={`min-h-11 rounded-xl border px-4 text-sm font-black transition focus:outline-none focus:ring-4 focus:ring-teal-100 ${
-                    settings.textSize === size
-                      ? "border-[#08aa9c] bg-[#08aa9c] text-white shadow-md shadow-teal-700/20"
-                      : "border-teal-100 bg-white text-slate-600 hover:bg-teal-50 hover:text-teal-700"
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
+            <div className="mt-3">
+              <TextSizeSelector
+                value={settings.textSize}
+                onChange={(size) => updateSetting("textSize", size)}
+              />
             </div>
           </div>
           <ToggleRow
