@@ -310,6 +310,21 @@ export default function PharmaciesPage() {
               </p>
             </div>
           )}
+          <div className="mt-5 rounded-3xl border border-dashed border-teal-200 bg-white p-5 shadow-xl shadow-teal-900/5">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-teal-700">
+              Future pharmacy loading state
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {[1, 2].map((item) => (
+                <div key={item} className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4" aria-hidden="true">
+                  <div className="mediora-skeleton h-12 w-12 rounded-2xl" />
+                  <div className="mediora-skeleton mt-4 h-3 w-3/4 rounded-full" />
+                  <div className="mediora-skeleton mt-3 h-3 w-full rounded-full" />
+                  <div className="mediora-skeleton mt-3 h-3 w-1/2 rounded-full" />
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         <aside className="h-fit rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5">
