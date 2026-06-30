@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { api } from "../lib/api";
+import { saveSession } from "../lib/auth";
 
 function Icon({ children }) {
   return (
@@ -141,7 +143,7 @@ export default function LoginPage() {
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setFormError("");
 
@@ -151,40 +153,14 @@ export default function LoginPage() {
 
     setIsSubmitting(true);
 
-    window.setTimeout(() => {
-      const storedUser = JSON.parse(window.localStorage.getItem("medioraMockUser") || "null");
-      const normalizedIdentifier = identifier.trim().toLowerCase();
-      const fallbackMatch =
-        (normalizedIdentifier === "user@mediora.com" ||
-          normalizedIdentifier === "mediorauser") &&
-        password === "user12345";
-      const storedMatch =
-        storedUser &&
-        (storedUser.email?.toLowerCase() === normalizedIdentifier ||
-          storedUser.username?.toLowerCase() === normalizedIdentifier) &&
-        storedUser.password === password;
-
-      if (fallbackMatch || storedMatch) {
-        window.localStorage.setItem("medioraUserAuthenticated", "true");
-        window.localStorage.setItem(
-          "medioraCurrentUser",
-          JSON.stringify(
-            storedMatch
-              ? storedUser
-              : {
-                  fullName: "Mediora User",
-                  username: "mediorauser",
-                  email: "user@mediora.com",
-                },
-          ),
-        );
-        router.replace("/dashboard");
-        return;
-      }
-
-      setIsSubmitting(false);
+    try {
+      const result = await api.login(identifier.trim(), password);
+      saveSession(result);
+      router.replace(result.user?.role === "Admin" ? "/admin/dashboard" : "/dashboard");
+    } catch (error) {
       setFormError("Invalid username/email or password.");
-    }, 450);
+      setIsSubmitting(false);
+    }
   }
 
   return (
