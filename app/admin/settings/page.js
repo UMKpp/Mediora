@@ -1,3 +1,4 @@
+import AdminProtectedPage from "../AdminProtectedPage";
 import { ActionButton, AdminCard, PageIntro } from "../AdminUI";
 
 const videoItems = [
@@ -32,72 +33,74 @@ function SettingRow({ label, description, action }) {
 
 export default function AdminSettingsPage() {
   return (
-    <div className="space-y-6">
-      <PageIntro
-        eyebrow="Admin controls"
-        title="Admin Settings"
-        description="Manage mock platform information, featured videos, and landing page content."
-      />
+    <AdminProtectedPage>
+      <div className="space-y-6">
+        <PageIntro
+          eyebrow="Admin controls"
+          title="Admin Settings"
+          description="Manage mock platform information, featured videos, and landing page content."
+        />
 
-      <section className="grid gap-6 xl:grid-cols-3">
-        <AdminCard
-          eyebrow="Platform"
-          title="Update Platform Information"
-          description="Frontend-only controls for public platform metadata."
-        >
-          <div className="grid gap-4">
-            <SettingRow
-              label="Platform Name"
-              description="Mediora healthcare platform branding."
-              action={<ActionButton>Edit</ActionButton>}
-            />
-            <SettingRow
-              label="Support Email"
-              description="admin-support@mediora.example"
-              action={<ActionButton>Edit</ActionButton>}
-            />
-            <SettingRow
-              label="Review Notice"
-              description="Emergency information last reviewed June 2026."
-              action={<ActionButton>Edit</ActionButton>}
-            />
-          </div>
-        </AdminCard>
-
-        <AdminCard
-          eyebrow="Media"
-          title="Manage Featured Videos"
-          description="Mock controls for the landing page feature preview videos."
-        >
-          <div className="grid gap-4">
-            {videoItems.map((item) => (
+        <section className="grid gap-6 xl:grid-cols-3">
+          <AdminCard
+            eyebrow="Platform"
+            title="Update Platform Information"
+            description="Frontend-only controls for public platform metadata."
+          >
+            <div className="grid gap-4">
               <SettingRow
-                key={item}
-                label={item}
-                description="Assigned to public landing page video preview."
-                action={<ActionButton>Update</ActionButton>}
-              />
-            ))}
-          </div>
-        </AdminCard>
-
-        <AdminCard
-          eyebrow="Landing"
-          title="Manage Landing Page Content"
-          description="Mock content controls for homepage sections."
-        >
-          <div className="grid gap-4">
-            {landingItems.map((item) => (
-              <SettingRow
-                key={item}
-                label={item}
-                description="Editable content block placeholder."
+                label="Platform Name"
+                description="Mediora healthcare platform branding."
                 action={<ActionButton>Edit</ActionButton>}
               />
-            ))}
-          </div>
-        </AdminCard>
-      </section>
-    </div>
+              <SettingRow
+                label="Support Email"
+                description="admin-support@mediora.example"
+                action={<ActionButton>Edit</ActionButton>}
+              />
+              <SettingRow
+                label="Review Notice"
+                description="Emergency information last reviewed June 2026."
+                action={<ActionButton>Edit</ActionButton>}
+              />
+            </div>
+          </AdminCard>
+
+          <AdminCard
+            eyebrow="Media"
+            title="Manage Featured Videos"
+            description="Mock controls for the landing page feature preview videos."
+          >
+            <div className="grid gap-4">
+              {videoItems.map((item) => (
+                <SettingRow
+                  key={item}
+                  label={item}
+                  description="Assigned to public landing page video preview."
+                  action={<ActionButton>Update</ActionButton>}
+                />
+              ))}
+            </div>
+          </AdminCard>
+
+          <AdminCard
+            eyebrow="Landing"
+            title="Manage Landing Page Content"
+            description="Mock content controls for homepage sections."
+          >
+            <div className="grid gap-4">
+              {landingItems.map((item) => (
+                <SettingRow
+                  key={item}
+                  label={item}
+                  description="Editable content block placeholder."
+                  action={<ActionButton>Edit</ActionButton>}
+                />
+              ))}
+            </div>
+          </AdminCard>
+        </section>
+      </div>
+    </AdminProtectedPage>
   );
 }
