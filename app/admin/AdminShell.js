@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { ThemeToggle } from "../ThemeControls";
+import { clearSession } from "../lib/auth";
 
 const navigation = [
   { label: "Dashboard", href: "/admin/dashboard" },
@@ -120,7 +121,7 @@ export default function AdminShell({ children }) {
   const title = pageTitles[pathname] || "Admin";
 
   function handleLogout() {
-    window.localStorage.removeItem("medioraAdminAuthenticated");
+    clearSession();
     setDrawerOpen(false);
     router.replace("/admin");
   }
