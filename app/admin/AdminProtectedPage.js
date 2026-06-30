@@ -3,16 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AdminShell from "./AdminShell";
+import { isAdminSession } from "../lib/auth";
 
 export default function AdminProtectedPage({ children }) {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const isAuthenticated =
-      window.localStorage.getItem("medioraAdminAuthenticated") === "true";
-
-    if (!isAuthenticated) {
+    if (!isAdminSession()) {
       router.replace("/admin");
       return;
     }
