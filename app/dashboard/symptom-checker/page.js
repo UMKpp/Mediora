@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { api } from "../../lib/api";
 
 const steps = [
   "Select Symptoms",
@@ -217,28 +218,57 @@ function Stepper({ currentStep }) {
 }
 
 export default function SymptomCheckerPage() {
+  const [apiSymptoms, setApiSymptoms] = useState([]);
+  const [symptomError, setSymptomError] = useState("");
+  const [analysisResults, setAnalysisResults] = useState([]);
+  const [analysisError, setAnalysisError] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [analysisProgress, setAnalysisProgress] = useState([96, 96, 96]);
+  const symptomList = apiSymptoms.length > 0 ? apiSymptoms : symptoms;
+  const categoryList = useMemo(
+    () => ["All", ...Array.from(new Set(symptomList.map((symptom) => symptom.category)))],
+    [symptomList],
+  );
 
   const filteredSymptoms = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
 
-    return symptoms.filter((symptom) => {
+    return symptomList.filter((symptom) => {
       const matchesSearch = symptom.name.toLowerCase().includes(query);
       const matchesCategory =
         activeCategory === "All" || symptom.category === activeCategory;
 
       return matchesSearch && matchesCategory;
     });
-  }, [activeCategory, searchTerm]);
+  }, [activeCategory, searchTerm, symptomList]);
 
-  const selectedSymptomDetails = symptoms.filter((symptom) =>
+  const selectedSymptomDetails = symptomList.filter((symptom) =>
     selectedSymptoms.includes(symptom.name)
   );
   const analysisComplete = analysisProgress.every((progress) => progress === 100);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSymptoms() {
+      try {
+        const records = await api.symptoms();
+        if (!active) return;
+        setApiSymptoms(records);
+      } catch (error) {
+        if (!active) return;
+        setSymptomError("Unable to load backend symptoms. Showing starter symptoms.");
+      }
+    }
+
+    loadSymptoms();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (currentStep !== 3) {
@@ -267,9 +297,18 @@ export default function SymptomCheckerPage() {
     );
   }
 
-  function startAnalysis() {
+  async function startAnalysis() {
     setAnalysisProgress([96, 96, 96]);
+    setAnalysisError("");
     setCurrentStep(3);
+
+    try {
+      const results = await api.analyzeSymptoms({ symptomNames: selectedSymptoms });
+      setAnalysisResults(results);
+    } catch (error) {
+      setAnalysisError("Unable to analyze symptoms with the backend right now.");
+      setAnalysisResults([]);
+    }
   }
 
   function startNewCheck() {
@@ -277,6 +316,8 @@ export default function SymptomCheckerPage() {
     setSearchTerm("");
     setActiveCategory("All");
     setSelectedSymptoms([]);
+    setAnalysisResults([]);
+    setAnalysisError("");
   }
 
   return (
@@ -339,7 +380,7 @@ export default function SymptomCheckerPage() {
           </div>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            {categories.map((category) => (
+            {categoryList.map((category) => (
               <button
                 key={category}
                 type="button"
@@ -396,6 +437,12 @@ export default function SymptomCheckerPage() {
           {filteredSymptoms.length === 0 && (
             <div className="mt-6 rounded-2xl border border-dashed border-teal-200 bg-teal-50/50 p-5 text-sm font-bold text-teal-800">
               No symptoms match your search.
+            </div>
+          )}
+
+          {symptomError && (
+            <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm font-bold text-amber-900">
+              {symptomError}
             </div>
           )}
 
@@ -588,9 +635,8 @@ export default function SymptomCheckerPage() {
                   Here&apos;s what we found
                 </h2>
                 <p className="mt-4 text-lg font-medium leading-8 text-slate-600">
-                  Based on the symptoms you selected, your symptoms may be
-                  related to common conditions such as the Common Cold, Flu, or
-                  Seasonal Allergies.
+              Based on the symptoms you selected, Mediora checked backend condition
+                  data and prepared the guidance below.
                 </p>
                 <p className="mt-4 rounded-2xl bg-teal-50 p-4 text-base font-bold leading-7 text-teal-800">
                   This is general health guidance only and not a medical
@@ -608,11 +654,11 @@ export default function SymptomCheckerPage() {
                       Risk Level
                     </p>
                     <h3 className="mt-2 text-2xl font-black text-amber-900">
-                      Low to Moderate
+                      {analysisResults[0]?.riskLevel || "Low to Moderate"}
                     </h3>
                     <p className="mt-3 text-base font-semibold leading-7 text-amber-900">
-                      Your symptoms do not currently indicate an emergency, but
-                      monitoring your condition is recommended.
+                      {analysisResults[0]?.recommendation ||
+                        "Your symptoms do not currently indicate an emergency, but monitoring your condition is recommended."}
                     </p>
                   </div>
                 </div>
@@ -620,12 +666,24 @@ export default function SymptomCheckerPage() {
             </div>
           </div>
 
+          {analysisError && (
+            <div className="rounded-3xl border border-red-200 bg-red-50 p-5 text-sm font-black text-red-700 shadow-xl shadow-red-900/5">
+              {analysisError}
+            </div>
+          )}
+
           <div className="rounded-3xl border border-teal-100 bg-white p-6 shadow-xl shadow-teal-900/5 sm:p-8">
             <h3 className="text-2xl font-black text-[#0d4050]">
               Possible Conditions
             </h3>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
-              {possibleConditions.map((condition) => (
+              {(analysisResults.length > 0
+                ? analysisResults.map((result) => ({
+                    name: result.conditionName,
+                    description: result.recommendation,
+                  }))
+                : possibleConditions
+              ).map((condition) => (
                 <article
                   key={condition.name}
                   className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-5 shadow-sm transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-xl hover:shadow-teal-900/10"
@@ -649,7 +707,13 @@ export default function SymptomCheckerPage() {
               Recommendations
             </h3>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {recommendations.map((recommendation) => (
+              {(analysisResults.length > 0
+                ? analysisResults.slice(0, 4).map((result) => ({
+                    title: result.conditionName,
+                    description: result.recommendation,
+                  }))
+                : recommendations
+              ).map((recommendation) => (
                 <article
                   key={recommendation.title}
                   className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-5 shadow-sm transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-xl hover:shadow-teal-900/10"
