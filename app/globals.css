@@ -208,6 +208,42 @@ input:-webkit-autofill:active {
   min-height: 48px;
 }
 
+.bg-\[\#08aa9c\] {
+  background-color: #0f766e !important;
+}
+
+.hover\:bg-\[\#07998c\]:hover {
+  background-color: #115e59 !important;
+}
+
+.dark .bg-\[\#08aa9c\] {
+  background-color: #0d9488 !important;
+}
+
+.dark .hover\:bg-\[\#07998c\]:hover {
+  background-color: #14b8a6 !important;
+}
+
+.dark .bg-red-50 {
+  background-color: rgba(127, 29, 29, 0.28) !important;
+}
+
+.dark .text-red-700,
+.dark .text-red-800,
+.dark .text-red-900 {
+  color: #fca5a5 !important;
+}
+
+.dark .border-red-200 {
+  border-color: rgba(248, 113, 113, 0.42) !important;
+}
+
+.animate-pulse,
+.motion-safe\:animate-pulse {
+  animation-duration: 4s !important;
+  animation-timing-function: ease-in-out !important;
+}
+
 @keyframes analysis-card-in {
   from {
     opacity: 0;
