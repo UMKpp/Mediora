@@ -61,18 +61,6 @@ export default function Home() {
   const selectedFeature = features[activeFeature];
 
   useEffect(() => {
-    if (isModalOpen) {
-      return undefined;
-    }
-
-    const rotation = window.setInterval(() => {
-      setActiveFeature((current) => (current + 1) % features.length);
-    }, 4200);
-
-    return () => window.clearInterval(rotation);
-  }, [isModalOpen]);
-
-  useEffect(() => {
     const revealItems = document.querySelectorAll(".reveal-on-scroll");
     const observer = new IntersectionObserver(
       (entries) => {
@@ -203,8 +191,6 @@ export default function Home() {
               src={selectedFeature.video}
               className="h-full w-full object-cover"
               muted
-              loop
-              autoPlay
               playsInline
               preload="metadata"
             />
@@ -218,7 +204,7 @@ export default function Home() {
                   {selectedFeature.title}
                 </span>
               </span>
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-red-600 text-white shadow-lg shadow-red-700/25 transition duration-300 group-hover:scale-110 sm:h-12 sm:w-12">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#0f766e] text-white shadow-lg shadow-teal-700/25 transition duration-300 group-hover:scale-105 sm:h-12 sm:w-12">
                 <PlayIcon />
               </span>
             </span>
@@ -267,12 +253,13 @@ export default function Home() {
                     src={feature.video}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     muted
+                    autoPlay
                     loop
                     playsInline
                     preload="metadata"
                   />
                   <span className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
-                  <span className="absolute bottom-3 left-3 grid h-10 w-10 place-items-center rounded-full bg-white/95 text-red-600 shadow-lg transition duration-300 group-hover:scale-110">
+                  <span className="absolute bottom-3 left-3 grid h-10 w-10 place-items-center rounded-full bg-white/95 text-teal-700 shadow-lg transition duration-300 group-hover:scale-105">
                     <PlayIcon className="h-4 w-4" />
                   </span>
                   <span className="absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-2xl bg-white/95">
