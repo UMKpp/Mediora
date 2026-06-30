@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeToggle } from "../ThemeControls";
 
 const navigation = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
@@ -156,7 +157,7 @@ export default function DashboardShell({ children }) {
   const title = pageTitles[pathname] || "Dashboard";
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f7fbfa] text-slate-950">
+    <div className="dashboard-text-scope min-h-screen overflow-x-hidden bg-[#f7fbfa] text-slate-950">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-teal-100 bg-white px-5 py-6 shadow-xl shadow-teal-900/5 lg:block">
         <Link href="/" className="mx-auto flex w-fit items-center justify-center pb-2">
           <Image
@@ -205,6 +206,7 @@ export default function DashboardShell({ children }) {
             </div>
 
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              <ThemeToggle compact />
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-bold text-slate-900">Patient Account</p>
                 <p className="text-xs font-semibold text-slate-500">Personal dashboard</p>
