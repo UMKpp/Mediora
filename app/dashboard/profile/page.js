@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 const profile = {
   fullName: "Mihira Upul",
@@ -82,6 +86,54 @@ function UserIcon() {
       />
     </svg>
   );
+}
+
+function AvatarPreset({ type }) {
+  const isFemale = type === "female";
+
+  return (
+    <svg aria-hidden="true" viewBox="0 0 96 96" className="h-full w-full">
+      <rect width="96" height="96" rx="28" fill={isFemale ? "#DDF7F1" : "#DCEFFC"} />
+      <circle cx="48" cy="38" r="17" fill={isFemale ? "#0F766E" : "#1D4ED8"} opacity="0.18" />
+      <path
+        d={isFemale ? "M26 45c0-18 10-28 22-28s22 10 22 28c0 10-4 18-9 23H35c-5-5-9-13-9-23Z" : "M29 38c2-14 12-22 28-17 8 3 12 10 10 21-2-6-7-10-15-12-10-2-17 1-23 8Z"}
+        fill={isFemale ? "#0F766E" : "#1D4ED8"}
+        opacity="0.7"
+      />
+      <circle cx="48" cy="42" r="14" fill="#F8FAFC" />
+      <path
+        d="M31 80c3-15 12-23 17-23s14 8 17 23"
+        fill="none"
+        stroke={isFemale ? "#0F766E" : "#1D4ED8"}
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+      <circle cx="43" cy="41" r="2" fill="#334155" />
+      <circle cx="53" cy="41" r="2" fill="#334155" />
+      <path d="M43 49c3 3 7 3 10 0" stroke="#334155" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+function ProfileAvatar({ selectedAvatar, uploadedAvatar }) {
+  if (uploadedAvatar) {
+    return (
+      <Image
+        src={uploadedAvatar}
+        alt="Uploaded profile avatar"
+        width={96}
+        height={96}
+        unoptimized
+        className="h-full w-full rounded-3xl object-cover"
+      />
+    );
+  }
+
+  if (selectedAvatar === "female" || selectedAvatar === "male") {
+    return <AvatarPreset type={selectedAvatar} />;
+  }
+
+  return <UserIcon />;
 }
 
 function LockIcon() {
@@ -212,6 +264,39 @@ function SecurityCard({ icon, title, description, action, muted = false }) {
 }
 
 export default function ProfilePage() {
+  const fileInputRef = useRef(null);
+  const [selectedAvatar, setSelectedAvatar] = useState("male");
+  const [uploadedAvatar, setUploadedAvatar] = useState("");
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setSelectedAvatar(window.localStorage.getItem("medioraProfileAvatarPreset") || "male");
+      setUploadedAvatar(window.localStorage.getItem("medioraProfileAvatarImage") || "");
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  function choosePreset(type) {
+    setSelectedAvatar(type);
+    setUploadedAvatar("");
+    window.localStorage.setItem("medioraProfileAvatarPreset", type);
+    window.localStorage.removeItem("medioraProfileAvatarImage");
+  }
+
+  function handleAvatarUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || "");
+      setUploadedAvatar(result);
+      window.localStorage.setItem("medioraProfileAvatarImage", result);
+    };
+    reader.readAsDataURL(file);
+  }
+
   return (
     <div className="space-y-6">
       <section className="overflow-hidden rounded-3xl border border-teal-100 bg-white shadow-xl shadow-teal-900/5">
@@ -226,8 +311,8 @@ export default function ProfilePage() {
 
           <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_0.42fr] lg:items-end">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-              <div className="grid h-24 w-24 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-teal-100 to-emerald-50 text-teal-700 ring-8 ring-teal-50">
-                <UserIcon />
+              <div className="grid h-28 w-28 shrink-0 place-items-center overflow-hidden rounded-3xl bg-gradient-to-br from-teal-100 to-emerald-50 text-teal-700 ring-8 ring-teal-50">
+                <ProfileAvatar selectedAvatar={selectedAvatar} uploadedAvatar={uploadedAvatar} />
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-teal-700">
@@ -239,6 +324,47 @@ export default function ProfilePage() {
                 <div className="mt-3 grid gap-1 text-sm font-bold text-slate-600 sm:text-base">
                   <p>{profile.username}</p>
                   <p>{profile.email}</p>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                    className="sr-only"
+                    aria-label="Upload profile image"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="min-h-11 rounded-xl bg-[#08aa9c] px-4 text-sm font-black text-white shadow-lg shadow-teal-700/20 transition hover:bg-[#07998c] active:scale-[0.98]"
+                  >
+                    Upload Image
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => choosePreset("female")}
+                    aria-pressed={!uploadedAvatar && selectedAvatar === "female"}
+                    className={`min-h-11 rounded-xl border px-4 text-sm font-black transition active:scale-[0.98] ${
+                      !uploadedAvatar && selectedAvatar === "female"
+                        ? "border-[#08aa9c] bg-teal-50 text-teal-700"
+                        : "border-teal-200 bg-white text-teal-700 hover:bg-teal-50"
+                    }`}
+                  >
+                    Female Avatar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => choosePreset("male")}
+                    aria-pressed={!uploadedAvatar && selectedAvatar === "male"}
+                    className={`min-h-11 rounded-xl border px-4 text-sm font-black transition active:scale-[0.98] ${
+                      !uploadedAvatar && selectedAvatar === "male"
+                        ? "border-[#08aa9c] bg-teal-50 text-teal-700"
+                        : "border-teal-200 bg-white text-teal-700 hover:bg-teal-50"
+                    }`}
+                  >
+                    Male Avatar
+                  </button>
                 </div>
               </div>
             </div>
