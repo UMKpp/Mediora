@@ -362,6 +362,16 @@ export default function ProfilePage() {
                 </div>
               </article>
             ))}
+            <article className="rounded-2xl border border-dashed border-teal-200 bg-[#fbfdfd] p-4">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-teal-700">
+                Future activity loading state
+              </p>
+              <div className="mt-4 space-y-3" aria-hidden="true">
+                <div className="mediora-skeleton h-3 w-32 rounded-full" />
+                <div className="mediora-skeleton h-3 w-full rounded-full" />
+                <div className="mediora-skeleton h-3 w-2/3 rounded-full" />
+              </div>
+            </article>
           </div>
         </SectionCard>
       </div>
