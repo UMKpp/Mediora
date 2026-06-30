@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { api } from "../lib/api";
 
 function FieldIcon({ type }) {
   if (type === "email") {
@@ -165,7 +166,7 @@ export default function RegisterPage() {
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setStatusMessage("");
 
@@ -175,19 +176,19 @@ export default function RegisterPage() {
 
     setIsSubmitting(true);
 
-    window.setTimeout(() => {
-      window.localStorage.setItem(
-        "medioraMockUser",
-        JSON.stringify({
-          fullName: form.fullName.trim(),
-          username: form.username.trim(),
-          email: form.email.trim(),
-          password: form.password,
-        }),
-      );
+    try {
+      await api.register({
+        fullName: form.fullName.trim(),
+        username: form.username.trim(),
+        email: form.email.trim(),
+        password: form.password,
+      });
       setStatusMessage("Account created successfully. Redirecting to sign in...");
       router.replace("/login");
-    }, 500);
+    } catch (error) {
+      setStatusMessage(error.message || "Could not create account. Please try again.");
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -294,7 +295,11 @@ export default function RegisterPage() {
               </button>
 
               {statusMessage && (
-                <p className="rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm font-black text-teal-700">
+                <p className={`rounded-2xl border px-4 py-3 text-sm font-black ${
+                  statusMessage.includes("successfully")
+                    ? "border-teal-200 bg-teal-50 text-teal-700"
+                    : "border-red-200 bg-red-50 text-red-700"
+                }`}>
                   {statusMessage}
                 </p>
               )}
