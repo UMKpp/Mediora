@@ -57,7 +57,7 @@ export function PageIntro({ eyebrow, title, description, actionHref, actionLabel
   );
 }
 
-export function ActionButton({ children, tone = "teal" }) {
+export function ActionButton({ children, tone = "teal", onClick }) {
   const classes =
     tone === "danger"
       ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
@@ -68,6 +68,7 @@ export function ActionButton({ children, tone = "teal" }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className={`min-h-10 rounded-xl border px-3 text-sm font-black transition active:scale-[0.98] ${classes}`}
     >
       {children}
