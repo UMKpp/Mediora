@@ -1,8 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7fbfc;
+  --background: #f3faf9;
   --foreground: #12323a;
+  --surface: #ffffff;
+  --surface-soft: #fbfdfd;
+  --primary: #0f766e;
+  --primary-hover: #115e59;
+  --muted: #475569;
+  --border-soft: #ccebe7;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #0f172a;
+  --foreground: #e5e7eb;
+  --surface: #1e293b;
+  --surface-soft: #243449;
+  --primary: #14b8a6;
+  --primary-hover: #2dd4bf;
+  --muted: #cbd5e1;
+  --border-soft: #335568;
 }
 
 * {
@@ -21,11 +39,19 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 15% 12%, rgba(20, 184, 166, 0.16), transparent 28rem),
-    radial-gradient(circle at 85% 18%, rgba(14, 165, 233, 0.14), transparent 24rem),
-    linear-gradient(135deg, #f7fbfc 0%, #eefaf7 48%, #eff8ff 100%);
+    radial-gradient(circle at 15% 12%, rgba(20, 184, 166, 0.1), transparent 28rem),
+    radial-gradient(circle at 85% 18%, rgba(14, 165, 233, 0.1), transparent 24rem),
+    linear-gradient(135deg, #f8f9fa 0%, #eef7f6 48%, #f4f5f7 100%);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(20, 184, 166, 0.12), transparent 28rem),
+    radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.1), transparent 24rem),
+    linear-gradient(135deg, #0f172a 0%, #111827 52%, #162033 100%);
 }
 
 button,
@@ -35,6 +61,23 @@ input {
 
 input {
   background-color: transparent;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  min-height: 44px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(20, 184, 166, 0.42);
+  outline-offset: 3px;
 }
 
 img,
@@ -65,6 +108,104 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 0 1000px #ffffff inset;
   caret-color: #0f172a;
   transition: background-color 9999s ease-in-out 0s;
+}
+
+.mediora-skeleton {
+  background: linear-gradient(90deg, #e8f1f0 0%, #f4f8f8 48%, #e8f1f0 100%);
+}
+
+.dark .mediora-skeleton {
+  background: linear-gradient(90deg, #243449 0%, #2d4058 48%, #243449 100%);
+}
+
+.dark .bg-white,
+.dark .bg-\[\#fbfdfd\],
+.dark .bg-\[\#f7fbfa\],
+.dark .bg-\[\#f4fbfa\],
+.dark .bg-\[\#f5fbfa\] {
+  background-color: var(--surface) !important;
+}
+
+.dark .bg-teal-50,
+.dark .bg-teal-50\/70,
+.dark .bg-\[\#dcfbf4\],
+.dark .bg-\[\#f1fbf8\],
+.dark .bg-\[\#f5fbfa\] {
+  background-color: var(--surface-soft) !important;
+}
+
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-\[\#0d4050\] {
+  color: #e5e7eb !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-teal-700,
+.dark .text-teal-800 {
+  color: #5eead4 !important;
+}
+
+.dark .border-teal-100,
+.dark .border-teal-200,
+.dark .border-slate-100,
+.dark .border-slate-200 {
+  border-color: var(--border-soft) !important;
+}
+
+.dark .shadow-teal-900\/5,
+.dark .shadow-slate-200\/80,
+.dark .shadow-slate-300\/45 {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28) !important;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #172033 !important;
+  color: #e5e7eb !important;
+}
+
+.dashboard-text-scope p,
+.dashboard-text-scope li {
+  line-height: 1.65;
+}
+
+.mediora-text-large .dashboard-text-scope .text-xs {
+  font-size: 0.82rem;
+}
+
+.mediora-text-large .dashboard-text-scope .text-sm {
+  font-size: 0.98rem;
+}
+
+.mediora-text-large .dashboard-text-scope .text-base {
+  font-size: 1.08rem;
+}
+
+.mediora-text-extra-large .dashboard-text-scope .text-xs {
+  font-size: 0.9rem;
+}
+
+.mediora-text-extra-large .dashboard-text-scope .text-sm {
+  font-size: 1.05rem;
+}
+
+.mediora-text-extra-large .dashboard-text-scope .text-base {
+  font-size: 1.16rem;
+}
+
+.mediora-text-large .dashboard-text-scope button,
+.mediora-text-large .dashboard-text-scope a,
+.mediora-text-extra-large .dashboard-text-scope button,
+.mediora-text-extra-large .dashboard-text-scope a {
+  min-height: 48px;
 }
 
 @keyframes analysis-card-in {
