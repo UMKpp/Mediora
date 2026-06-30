@@ -85,18 +85,6 @@ Mediora aims to simplify access to healthcare by offering tools that help users 
 - PostgreSQL
 - JWT Authentication
 
-## Project Status
-
-```text
-Frontend Development        [##########--] 80%
-UI/UX Design                [##########--] 85%
-Authentication              [########----] 60%
-Backend Development         [------------] 0%
-Database Integration        [------------] 0%
-Testing                     [------------] 0%
-Deployment                  [------------] 0%
-```
-
 ## Screens Under Development
 
 - Landing Page
