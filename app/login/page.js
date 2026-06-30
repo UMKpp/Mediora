@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function Icon({ children }) {
@@ -117,7 +118,74 @@ function PosterIcon({ type }) {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  function validateForm() {
+    const nextErrors = {};
+
+    if (!identifier.trim()) {
+      nextErrors.identifier = "Username or email is required.";
+    }
+
+    if (!password) {
+      nextErrors.password = "Password is required.";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setFormError("");
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    window.setTimeout(() => {
+      const storedUser = JSON.parse(window.localStorage.getItem("medioraMockUser") || "null");
+      const normalizedIdentifier = identifier.trim().toLowerCase();
+      const fallbackMatch =
+        (normalizedIdentifier === "user@mediora.com" ||
+          normalizedIdentifier === "mediorauser") &&
+        password === "user12345";
+      const storedMatch =
+        storedUser &&
+        (storedUser.email?.toLowerCase() === normalizedIdentifier ||
+          storedUser.username?.toLowerCase() === normalizedIdentifier) &&
+        storedUser.password === password;
+
+      if (fallbackMatch || storedMatch) {
+        window.localStorage.setItem("medioraUserAuthenticated", "true");
+        window.localStorage.setItem(
+          "medioraCurrentUser",
+          JSON.stringify(
+            storedMatch
+              ? storedUser
+              : {
+                  fullName: "Mediora User",
+                  username: "mediorauser",
+                  email: "user@mediora.com",
+                },
+          ),
+        );
+        router.replace("/dashboard");
+        return;
+      }
+
+      setIsSubmitting(false);
+      setFormError("Invalid username/email or password.");
+    }, 450);
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center overflow-x-hidden bg-[#f5fbfa] p-3 text-slate-900 sm:p-6 lg:p-12">
@@ -237,38 +305,67 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <form className="mt-6 space-y-4">
+            <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
               <label className="block">
                 <span className="text-sm font-bold text-slate-900">
                   Username or Email
                 </span>
-                <span className="mt-2 flex h-12 items-center rounded-xl border border-slate-200 bg-white px-3 shadow-sm transition focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-100">
+                <span className={`mt-2 flex h-12 items-center rounded-xl border bg-white px-3 shadow-sm transition focus-within:ring-4 ${
+                  errors.identifier
+                    ? "border-red-300 focus-within:border-red-400 focus-within:ring-red-100"
+                    : "border-slate-200 focus-within:border-teal-500 focus-within:ring-teal-100"
+                }`}>
                   <Icon>
                     <FieldIcon />
                   </Icon>
                   <input
                     type="text"
                     name="identifier"
+                    value={identifier}
+                    onChange={(event) => {
+                      setIdentifier(event.target.value);
+                      setErrors((current) => ({ ...current, identifier: "" }));
+                      setFormError("");
+                    }}
                     autoComplete="username"
                     placeholder="Enter your username or email"
+                    aria-invalid={Boolean(errors.identifier)}
+                    aria-describedby={errors.identifier ? "identifier-error" : undefined}
                     className="h-full min-w-0 flex-1 bg-transparent px-2 text-base text-slate-900 outline-none placeholder:text-slate-400"
                   />
                 </span>
+                {errors.identifier && (
+                  <p id="identifier-error" className="mt-2 text-sm font-bold text-red-700">
+                    {errors.identifier}
+                  </p>
+                )}
               </label>
 
               <label className="block">
                 <span className="text-sm font-bold text-slate-900">
                   Password
                 </span>
-                <span className="mt-2 flex h-12 items-center rounded-xl border border-slate-200 bg-white px-3 shadow-sm transition focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-100">
+                <span className={`mt-2 flex h-12 items-center rounded-xl border bg-white px-3 shadow-sm transition focus-within:ring-4 ${
+                  errors.password
+                    ? "border-red-300 focus-within:border-red-400 focus-within:ring-red-100"
+                    : "border-slate-200 focus-within:border-teal-500 focus-within:ring-teal-100"
+                }`}>
                   <Icon>
                     <FieldIcon type="lock" />
                   </Icon>
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    value={password}
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                      setErrors((current) => ({ ...current, password: "" }));
+                      setFormError("");
+                    }}
                     autoComplete="current-password"
                     placeholder="Enter your password"
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={errors.password ? "password-error" : undefined}
                     className="h-full min-w-0 flex-1 bg-transparent px-2 text-base text-slate-900 outline-none placeholder:text-slate-400"
                   />
                   <button
@@ -287,6 +384,11 @@ export default function LoginPage() {
                     />
                   </button>
                 </span>
+                {errors.password && (
+                  <p id="password-error" className="mt-2 text-sm font-bold text-red-700">
+                    {errors.password}
+                  </p>
+                )}
               </label>
 
               <div className="text-right">
@@ -299,11 +401,18 @@ export default function LoginPage() {
               </div>
 
               <button
-                type="button"
-                className="h-12 w-full rounded-xl bg-[#08aa9c] px-6 text-base font-bold text-white shadow-lg shadow-teal-600/20 transition hover:bg-[#07998c] focus:outline-none focus:ring-4 focus:ring-teal-100"
+                type="submit"
+                disabled={isSubmitting}
+                className="h-12 w-full rounded-xl bg-[#08aa9c] px-6 text-base font-bold text-white shadow-lg shadow-teal-600/20 transition hover:bg-[#07998c] focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Sign In
+                {isSubmitting ? "Signing in..." : "Sign In"}
               </button>
+
+              {formError && (
+                <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-black text-red-700">
+                  {formError}
+                </p>
+              )}
 
               <div className="flex items-center gap-4 text-slate-400">
                 <span className="h-px flex-1 bg-slate-200" />
