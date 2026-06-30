@@ -17,6 +17,7 @@ export default function AdminAnalyticsPage() {
           <BarChartCard title="Most Searched Symptoms" data={analytics.symptoms} />
           <BarChartCard title="Doctor Searches" data={analytics.doctorSearches} />
           <BarChartCard title="Pharmacy Searches" data={analytics.pharmacySearches} />
+          <BarChartCard title="Emergency Clicks" data={analytics.emergencyClicks} />
         </section>
       </div>
     </AdminProtectedPage>
