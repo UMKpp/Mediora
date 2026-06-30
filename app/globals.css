@@ -13,14 +13,14 @@
 
 .dark {
   color-scheme: dark;
-  --background: #0f172a;
-  --foreground: #e5e7eb;
-  --surface: #1e293b;
-  --surface-soft: #243449;
-  --primary: #14b8a6;
-  --primary-hover: #2dd4bf;
-  --muted: #cbd5e1;
-  --border-soft: #335568;
+  --background: #101c2b;
+  --foreground: #edf7f6;
+  --surface: #172638;
+  --surface-soft: #203449;
+  --primary: #2dd4bf;
+  --primary-hover: #5eead4;
+  --muted: #bfd4dd;
+  --border-soft: #3a5968;
 }
 
 * {
@@ -49,9 +49,9 @@ body {
 
 .dark body {
   background:
-    radial-gradient(circle at 18% 8%, rgba(20, 184, 166, 0.12), transparent 28rem),
-    radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.1), transparent 24rem),
-    linear-gradient(135deg, #0f172a 0%, #111827 52%, #162033 100%);
+    radial-gradient(circle at 18% 8%, rgba(45, 212, 191, 0.12), transparent 28rem),
+    radial-gradient(circle at 88% 14%, rgba(96, 165, 250, 0.09), transparent 24rem),
+    linear-gradient(135deg, #101c2b 0%, #132438 48%, #182f3c 100%);
 }
 
 button,
@@ -119,11 +119,17 @@ input:-webkit-autofill:active {
 }
 
 .dark .bg-white,
+.dark .bg-white\/90,
+.dark .bg-white\/95,
 .dark .bg-\[\#fbfdfd\],
 .dark .bg-\[\#f7fbfa\],
 .dark .bg-\[\#f4fbfa\],
 .dark .bg-\[\#f5fbfa\] {
   background-color: var(--surface) !important;
+}
+
+.dark .backdrop-blur {
+  background-color: rgba(23, 38, 56, 0.96) !important;
 }
 
 .dark .bg-teal-50,
@@ -138,18 +144,18 @@ input:-webkit-autofill:active {
 .dark .text-slate-900,
 .dark .text-slate-800,
 .dark .text-\[\#0d4050\] {
-  color: #e5e7eb !important;
+  color: #edf7f6 !important;
 }
 
 .dark .text-slate-700,
 .dark .text-slate-600,
 .dark .text-slate-500 {
-  color: #cbd5e1 !important;
+  color: #bfd4dd !important;
 }
 
 .dark .text-teal-700,
 .dark .text-teal-800 {
-  color: #5eead4 !important;
+  color: #7dded2 !important;
 }
 
 .dark .border-teal-100,
@@ -168,8 +174,8 @@ input:-webkit-autofill:active {
 .dark input,
 .dark select,
 .dark textarea {
-  background-color: #172033 !important;
-  color: #e5e7eb !important;
+  background-color: #132033 !important;
+  color: #edf7f6 !important;
 }
 
 .dashboard-text-scope p,
@@ -217,11 +223,11 @@ input:-webkit-autofill:active {
 }
 
 .dark .bg-\[\#08aa9c\] {
-  background-color: #0d9488 !important;
+  background-color: #0f8f86 !important;
 }
 
 .dark .hover\:bg-\[\#07998c\]:hover {
-  background-color: #14b8a6 !important;
+  background-color: #12a89e !important;
 }
 
 .dark .bg-red-50 {
