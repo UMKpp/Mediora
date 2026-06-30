@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { api } from "../../lib/api";
 import {
   districts,
   districtsByProvince,
-  pharmacies,
   provinces,
 } from "../../../data/pharmacies";
 
@@ -69,6 +69,9 @@ function StatusBadge({ children, tone = "teal" }) {
 }
 
 export default function PharmaciesPage() {
+  const [apiPharmacies, setApiPharmacies] = useState([]);
+  const [isLoadingPharmacies, setIsLoadingPharmacies] = useState(true);
+  const [pharmacyError, setPharmacyError] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("All Provinces");
   const [selectedDistrict, setSelectedDistrict] = useState("All Districts");
   const [pharmacySearch, setPharmacySearch] = useState("");
@@ -86,7 +89,7 @@ export default function PharmaciesPage() {
   const filteredPharmacies = useMemo(() => {
     const query = pharmacySearch.trim().toLowerCase();
 
-    return pharmacies.filter((pharmacy) => {
+    return apiPharmacies.filter((pharmacy) => {
       const matchesProvince =
         selectedProvince === "All Provinces" || pharmacy.province === selectedProvince;
       const matchesDistrict =
@@ -114,7 +117,42 @@ export default function PharmaciesPage() {
 
       return matchesProvince && matchesDistrict && matchesSearch && matchesQuickFilters;
     });
-  }, [activeFilters, pharmacySearch, selectedDistrict, selectedProvince]);
+  }, [activeFilters, apiPharmacies, pharmacySearch, selectedDistrict, selectedProvince]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadPharmacies() {
+      setIsLoadingPharmacies(true);
+      setPharmacyError("");
+
+      try {
+        const records = await api.pharmacies();
+        if (!active) return;
+        setApiPharmacies(
+          records.map((pharmacy) => ({
+            ...pharmacy,
+            image: "/images/pharmacy.png",
+            services: [
+              pharmacy.is24Hours ? "24 hour access" : "Standard pharmacy service",
+              pharmacy.homeDelivery ? "Home delivery" : "In-store pickup",
+            ],
+          })),
+        );
+      } catch (error) {
+        if (!active) return;
+        setPharmacyError("Unable to load pharmacies from the backend.");
+        setApiPharmacies([]);
+      } finally {
+        if (active) setIsLoadingPharmacies(false);
+      }
+    }
+
+    loadPharmacies();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   function handleProvinceChange(province) {
     setSelectedProvince(province);
@@ -233,13 +271,29 @@ export default function PharmaciesPage() {
         </div>
 
         <p className="mt-4 text-sm font-bold text-slate-500">
-          Showing {filteredPharmacies.length} mock pharmacies across Sri Lanka.
+          Showing {filteredPharmacies.length} pharmacies from Mediora care data.
         </p>
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
         <section>
-          {filteredPharmacies.length > 0 ? (
+          {isLoadingPharmacies ? (
+            <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3" aria-live="polite">
+              {[1, 2, 3].map((item) => (
+                <div key={item} className="rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5">
+                  <div className="mediora-skeleton h-16 w-16 rounded-3xl" />
+                  <div className="mediora-skeleton mt-5 h-4 w-3/4 rounded-full" />
+                  <div className="mediora-skeleton mt-3 h-3 w-full rounded-full" />
+                  <div className="mediora-skeleton mt-3 h-3 w-2/3 rounded-full" />
+                </div>
+              ))}
+            </div>
+          ) : pharmacyError ? (
+            <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center shadow-xl shadow-red-900/5">
+              <h2 className="text-2xl font-black text-red-900">No pharmacies found.</h2>
+              <p className="mt-3 text-base font-semibold text-red-700">{pharmacyError}</p>
+            </div>
+          ) : filteredPharmacies.length > 0 ? (
             <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
               {filteredPharmacies.map((pharmacy) => (
                 <article
