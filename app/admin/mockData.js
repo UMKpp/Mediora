@@ -1,7 +1,7 @@
 export const adminStats = [
   { label: "Total Users", value: "1,245", detail: "128 active this week" },
-  { label: "Registered Doctors", value: "96", detail: "12 pending review" },
-  { label: "Registered Pharmacies", value: "74", detail: "8 open 24 hours" },
+  { label: "Doctors", value: "96", detail: "12 pending review" },
+  { label: "Pharmacies", value: "74", detail: "8 open 24 hours" },
   { label: "Emergency Contacts", value: "18", detail: "5 national hotlines" },
 ];
 
@@ -93,21 +93,25 @@ export const pharmacies = [
     name: "City Health Pharmacy",
     district: "Colombo",
     phone: "011 245 7788",
+    status: "Active",
   },
   {
     name: "Green Cross Pharmacy",
     district: "Kandy",
     phone: "081 223 4455",
+    status: "Active",
   },
   {
     name: "MediQuick Pharmacy",
     district: "Galle",
     phone: "091 224 1880",
+    status: "Pending",
   },
   {
     name: "CarePlus Pharmacy",
     district: "Gampaha",
     phone: "033 224 7781",
+    status: "Active",
   },
 ];
 
@@ -164,5 +168,11 @@ export const analytics = {
     { label: "Kandy", value: 61 },
     { label: "Galle", value: 45 },
     { label: "Gampaha", value: 39 },
+  ],
+  emergencyClicks: [
+    { label: "1990", value: 112 },
+    { label: "119", value: 76 },
+    { label: "1926", value: 44 },
+    { label: "1999", value: 31 },
   ],
 };
