@@ -3,16 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DashboardShell from "./DashboardShell";
+import { isUserSession } from "../lib/auth";
 
 export default function UserProtectedPage({ children }) {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const isAuthenticated =
-      window.localStorage.getItem("medioraUserAuthenticated") === "true";
-
-    if (!isAuthenticated) {
+    if (!isUserSession()) {
       router.replace("/login");
       return undefined;
     }
