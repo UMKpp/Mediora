@@ -156,6 +156,11 @@ export default function DashboardShell({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const title = pageTitles[pathname] || "Dashboard";
 
+  function handleLogout() {
+    window.localStorage.removeItem("medioraUserAuthenticated");
+    window.localStorage.removeItem("medioraCurrentUser");
+  }
+
   return (
     <div className="dashboard-text-scope min-h-screen overflow-x-hidden bg-[#f7fbfa] text-slate-950">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-teal-100 bg-white px-5 py-6 shadow-xl shadow-teal-900/5 lg:block">
@@ -179,6 +184,7 @@ export default function DashboardShell({ children }) {
         <div className="absolute bottom-6 left-1/2 w-[210px] -translate-x-1/2">
           <Link
             href="/login"
+            onClick={handleLogout}
             className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-500 transition hover:bg-rose-50 hover:text-rose-700"
           >
             <Image
@@ -241,7 +247,10 @@ export default function DashboardShell({ children }) {
                 ))}
                 <Link
                   href="/login"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => {
+                    handleLogout();
+                    setMenuOpen(false);
+                  }}
                   className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-500 transition hover:bg-rose-50 hover:text-rose-700"
                 >
                   <Image
