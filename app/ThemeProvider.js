@@ -4,10 +4,10 @@ import { useEffect } from "react";
 
 function applyPreferences() {
   const root = document.documentElement;
-  const darkMode = window.localStorage.getItem("medioraDarkMode") === "true";
   const textSize = window.localStorage.getItem("medioraTextSize") || "Normal";
 
-  root.classList.toggle("dark", darkMode);
+  window.localStorage.removeItem("medioraDarkMode");
+  root.classList.remove("dark");
   root.classList.remove("mediora-text-large", "mediora-text-extra-large");
 
   if (textSize === "Large") {
