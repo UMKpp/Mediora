@@ -9,10 +9,9 @@ const videoItems = [
 ];
 
 const landingItems = [
-  "Hero headline",
-  "Feature card descriptions",
-  "Why Mediora section",
-  "Footer copyright text",
+  "Platform name",
+  "Featured videos",
+  "Emergency information review date",
 ];
 
 function SettingRow({ label, description, action }) {
@@ -85,8 +84,8 @@ export default function AdminSettingsPage() {
 
           <AdminCard
             eyebrow="Landing"
-            title="Manage Landing Page Content"
-            description="Mock content controls for homepage sections."
+            title="Platform Settings Placeholders"
+            description="Mock placeholders for backend-managed platform settings."
           >
             <div className="grid gap-4">
               {landingItems.map((item) => (
