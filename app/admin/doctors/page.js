@@ -20,7 +20,7 @@ export default function AdminDoctorsPage() {
         />
 
         <div className="flex justify-end">
-          <ActionButton tone="solid">Add Doctor</ActionButton>
+          <ActionButton tone="solid">Add New</ActionButton>
         </div>
 
         <ResponsiveTable
