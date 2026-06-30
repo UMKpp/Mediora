@@ -1,6 +1,39 @@
-import AdminProtectedPage from "../AdminProtectedPage";
-import { ActionButton, PageIntro, ResponsiveTable } from "../AdminUI";
-import { doctors } from "../mockData";
+"use client";
+
+import AdminResourcePage from "../AdminResourcePage";
+import { api } from "../../lib/api";
+
+const defaultForm = {
+  name: "",
+  specialization: "",
+  province: "",
+  district: "",
+  city: "",
+  hospital: "",
+  symptoms: "",
+  experience: "",
+  rating: 4.5,
+  availability: "",
+  phone: "",
+  consultationHours: "",
+  languages: "",
+};
+
+const fields = [
+  { name: "name", label: "Doctor Name", required: true },
+  { name: "specialization", label: "Specialization", required: true },
+  { name: "province", label: "Province", required: true },
+  { name: "district", label: "District", required: true },
+  { name: "city", label: "City", required: true },
+  { name: "hospital", label: "Hospital", required: true },
+  { name: "symptoms", label: "Symptoms", required: true, wide: true },
+  { name: "experience", label: "Experience", required: true },
+  { name: "rating", label: "Rating", type: "number", required: true },
+  { name: "availability", label: "Availability", required: true },
+  { name: "phone", label: "Phone", required: true },
+  { name: "consultationHours", label: "Consultation Hours", required: true },
+  { name: "languages", label: "Languages", required: true },
+];
 
 const columns = [
   { key: "name", label: "Doctor Name" },
@@ -11,29 +44,21 @@ const columns = [
 
 export default function AdminDoctorsPage() {
   return (
-    <AdminProtectedPage>
-      <div className="space-y-6">
-        <PageIntro
-          eyebrow="Care providers"
-          title="Doctor Management"
-          description="Manage mock doctor profiles, hospital assignments, and specialties."
-        />
-
-        <div className="flex justify-end">
-          <ActionButton tone="solid">Add New</ActionButton>
-        </div>
-
-        <ResponsiveTable
-          columns={columns}
-          rows={doctors}
-          renderActions={() => (
-            <>
-              <ActionButton>Edit</ActionButton>
-              <ActionButton tone="danger">Delete</ActionButton>
-            </>
-          )}
-        />
-      </div>
-    </AdminProtectedPage>
+    <AdminResourcePage
+      intro={{
+        eyebrow: "Care providers",
+        title: "Doctor Management",
+        description: "Manage doctor profiles, hospital assignments, and specialties from the backend.",
+      }}
+      columns={columns}
+      fields={fields}
+      defaultForm={defaultForm}
+      emptyMessage="No doctors found."
+      loadRecords={api.doctors}
+      createRecord={api.createDoctor}
+      updateRecord={api.updateDoctor}
+      deleteRecord={api.deleteDoctor}
+      mapRecordToForm={(record) => ({ ...defaultForm, ...record })}
+    />
   );
 }
