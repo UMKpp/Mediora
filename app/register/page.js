@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function FieldIcon({ type }) {
@@ -53,6 +54,7 @@ function TextField({
   value,
   onChange,
   hasError = false,
+  error,
 }) {
   const isPassword = type === "password";
   const fieldStateClass = hasError
@@ -74,6 +76,7 @@ function TextField({
           value={value}
           onChange={onChange}
           aria-invalid={hasError}
+          aria-describedby={error ? `${name}-error` : undefined}
           className="h-full min-w-0 flex-1 bg-transparent px-2 text-base font-medium text-slate-900 outline-none placeholder:text-slate-400"
         />
         {isPassword && (
@@ -94,17 +97,98 @@ function TextField({
           </button>
         )}
       </span>
+      {error && (
+        <p id={`${name}-error`} className="mt-2 text-sm font-bold text-red-700">
+          {error}
+        </p>
+      )}
     </label>
   );
 }
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [form, setForm] = useState({
+    fullName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [statusMessage, setStatusMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const passwordsMismatch =
     confirmPassword.length > 0 && password !== confirmPassword;
+
+  function updateField(field, value) {
+    setForm((current) => ({ ...current, [field]: value }));
+    setErrors((current) => ({ ...current, [field]: "" }));
+    setStatusMessage("");
+
+    if (field === "password") {
+      setPassword(value);
+    }
+
+    if (field === "confirmPassword") {
+      setConfirmPassword(value);
+    }
+  }
+
+  function validateForm() {
+    const nextErrors = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!form.fullName.trim()) nextErrors.fullName = "Full name is required.";
+    if (!form.username.trim()) nextErrors.username = "Username is required.";
+    if (!form.email.trim()) {
+      nextErrors.email = "Email is required.";
+    } else if (!emailPattern.test(form.email)) {
+      nextErrors.email = "Enter a valid email address.";
+    }
+    if (!form.password) {
+      nextErrors.password = "Password is required.";
+    } else if (form.password.length < 8) {
+      nextErrors.password = "Password must be at least 8 characters.";
+    }
+    if (!form.confirmPassword) {
+      nextErrors.confirmPassword = "Confirm your password.";
+    } else if (form.password !== form.confirmPassword) {
+      nextErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setStatusMessage("");
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    window.setTimeout(() => {
+      window.localStorage.setItem(
+        "medioraMockUser",
+        JSON.stringify({
+          fullName: form.fullName.trim(),
+          username: form.username.trim(),
+          email: form.email.trim(),
+          password: form.password,
+        }),
+      );
+      setStatusMessage("Account created successfully. Redirecting to sign in...");
+      router.replace("/login");
+    }, 500);
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center overflow-x-hidden bg-[#f5fbfa] p-3 text-slate-950 sm:p-6 lg:p-12">
@@ -131,18 +215,26 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            <form className="mt-6 space-y-4">
+            <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
               <TextField
                 label="Full Name"
                 name="fullName"
                 autoComplete="name"
                 placeholder="Enter your full name"
+                value={form.fullName}
+                onChange={(event) => updateField("fullName", event.target.value)}
+                hasError={Boolean(errors.fullName)}
+                error={errors.fullName}
               />
               <TextField
                 label="Username"
                 name="username"
                 autoComplete="username"
                 placeholder="Choose a username"
+                value={form.username}
+                onChange={(event) => updateField("username", event.target.value)}
+                hasError={Boolean(errors.username)}
+                error={errors.username}
               />
               <TextField
                 label="Email"
@@ -151,6 +243,10 @@ export default function RegisterPage() {
                 icon="email"
                 autoComplete="email"
                 placeholder="Enter your email address"
+                value={form.email}
+                onChange={(event) => updateField("email", event.target.value)}
+                hasError={Boolean(errors.email)}
+                error={errors.email}
               />
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -163,7 +259,9 @@ export default function RegisterPage() {
                   placeholder="Create a password"
                   visible={showPassword}
                   value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  onChange={(event) => updateField("password", event.target.value)}
+                  hasError={Boolean(errors.password)}
+                  error={errors.password}
                   onToggleVisibility={() => setShowPassword((visible) => !visible)}
                 />
                 <TextField
@@ -175,8 +273,9 @@ export default function RegisterPage() {
                   placeholder="Confirm your password"
                   visible={showConfirmPassword}
                   value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                  hasError={passwordsMismatch}
+                  onChange={(event) => updateField("confirmPassword", event.target.value)}
+                  hasError={passwordsMismatch || Boolean(errors.confirmPassword)}
+                  error={errors.confirmPassword}
                   onToggleVisibility={() =>
                     setShowConfirmPassword((visible) => !visible)
                   }
@@ -184,14 +283,21 @@ export default function RegisterPage() {
               </div>
 
               <button
-                type="button"
-                className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#08aa9c] px-6 text-base font-bold text-white shadow-lg shadow-teal-600/20 transition hover:bg-[#07998c] focus:outline-none focus:ring-4 focus:ring-teal-100"
+                type="submit"
+                disabled={isSubmitting}
+                className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#08aa9c] px-6 text-base font-bold text-white shadow-lg shadow-teal-600/20 transition hover:bg-[#07998c] focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Create Account
+                {isSubmitting ? "Creating account..." : "Create Account"}
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none">
                   <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
+
+              {statusMessage && (
+                <p className="rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm font-black text-teal-700">
+                  {statusMessage}
+                </p>
+              )}
 
             </form>
 
