@@ -17,7 +17,9 @@ export default function AdminProtectedPage({ children }) {
       return;
     }
 
-    setChecked(true);
+    const frame = window.requestAnimationFrame(() => setChecked(true));
+
+    return () => window.cancelAnimationFrame(frame);
   }, [router]);
 
   if (!checked) {
