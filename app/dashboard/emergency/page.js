@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { api } from "../../lib/api";
 
 const emergencySections = [
   {
@@ -439,7 +440,52 @@ function InstitutionCard({ institution, onViewDetails }) {
 }
 
 export default function EmergencyPage() {
+  const [apiServices, setApiServices] = useState([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(true);
+  const [servicesError, setServicesError] = useState("");
   const [selectedInstitution, setSelectedInstitution] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadEmergencyServices() {
+      setIsLoadingServices(true);
+      setServicesError("");
+
+      try {
+        const records = await api.emergencyServices();
+        if (!active) return;
+        setApiServices(records);
+      } catch (error) {
+        if (!active) return;
+        setServicesError("Unable to load emergency services from the backend.");
+        setApiServices([]);
+      } finally {
+        if (active) setIsLoadingServices(false);
+      }
+    }
+
+    loadEmergencyServices();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const contactSections = useMemo(() => {
+    if (apiServices.length === 0) return emergencySections;
+
+    const hotlineRows = apiServices
+      .filter((service) => service.hotline !== "1990")
+      .map((service) => ({
+        name: service.serviceName,
+        description: service.description,
+        call: { label: `Call ${service.hotline}`, href: `tel:${service.hotline}` },
+      }));
+
+    return emergencySections.map((section) =>
+      section.id === "police" ? { ...section, emergencyServices: hotlineRows } : section,
+    );
+  }, [apiServices]);
 
   function scrollToSection(target) {
     document.getElementById(target)?.scrollIntoView({
@@ -510,10 +556,32 @@ export default function EmergencyPage() {
       </nav>
 
       <section className="grid items-stretch gap-5 lg:grid-cols-2">
-        {emergencySections.map((section) => (
+        {contactSections.map((section) => (
           <ContactCard key={section.title} section={section} />
         ))}
       </section>
+
+      {isLoadingServices && (
+        <section className="rounded-3xl border border-teal-100 bg-white p-5 shadow-xl shadow-teal-900/5">
+          <p className="text-sm font-black uppercase tracking-[0.18em] text-teal-700">
+            Loading emergency services
+          </p>
+          <div className="mt-4 grid gap-3">
+            {[1, 2].map((item) => (
+              <div key={item} className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
+                <div className="mediora-skeleton h-4 w-2/3 rounded-full" />
+                <div className="mediora-skeleton mt-3 h-3 w-full rounded-full" />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {servicesError && (
+        <section className="rounded-3xl border border-red-200 bg-red-50 p-5 text-sm font-black text-red-700 shadow-xl shadow-red-900/5">
+          No emergency services found. {servicesError}
+        </section>
+      )}
 
       <section
         id="specialized-hospitals"
