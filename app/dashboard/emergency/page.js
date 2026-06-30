@@ -550,6 +550,15 @@ export default function EmergencyPage() {
           Location-based emergency hospital recommendations will be available in future
           updates.
         </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2" aria-hidden="true">
+          {[1, 2].map((item) => (
+            <div key={item} className="rounded-2xl border border-teal-100 bg-[#fbfdfd] p-4">
+              <div className="mediora-skeleton h-4 w-2/3 rounded-full" />
+              <div className="mediora-skeleton mt-3 h-3 w-full rounded-full" />
+              <div className="mediora-skeleton mt-3 h-3 w-1/2 rounded-full" />
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="rounded-3xl border border-amber-200 bg-amber-50 p-5 shadow-lg shadow-amber-900/5">
