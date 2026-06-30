@@ -1,11 +1,20 @@
 import AdminProtectedPage from "../AdminProtectedPage";
-import { ActionButton, PageIntro, ResponsiveTable } from "../AdminUI";
+import { ActionButton, PageIntro, ResponsiveTable, StatusBadge } from "../AdminUI";
 import { pharmacies } from "../mockData";
 
 const columns = [
   { key: "name", label: "Pharmacy Name" },
   { key: "district", label: "District" },
-  { key: "phone", label: "Phone Number" },
+  { key: "phone", label: "Phone" },
+  {
+    key: "status",
+    label: "Status",
+    render: (pharmacy) => (
+      <StatusBadge tone={pharmacy.status === "Pending" ? "amber" : "teal"}>
+        {pharmacy.status}
+      </StatusBadge>
+    ),
+  },
 ];
 
 export default function AdminPharmaciesPage() {
@@ -19,7 +28,7 @@ export default function AdminPharmaciesPage() {
         />
 
         <div className="flex justify-end">
-          <ActionButton tone="solid">Add Pharmacy</ActionButton>
+          <ActionButton tone="solid">Add New</ActionButton>
         </div>
 
         <ResponsiveTable
