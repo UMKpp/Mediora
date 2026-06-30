@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { api } from "../lib/api";
+import { saveSession } from "../lib/auth";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -12,7 +14,7 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const nextErrors = {};
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,16 +38,20 @@ export default function AdminLoginPage() {
 
     setIsSubmitting(true);
 
-    window.setTimeout(() => {
-      if (email.trim() === "admin@mediora.com" && password === "admin123") {
-        window.localStorage.setItem("medioraAdminAuthenticated", "true");
+    try {
+      const result = await api.login(email.trim(), password);
+      if (result.user?.role === "Admin") {
+        saveSession(result);
         router.replace("/admin/dashboard");
         return;
       }
 
+      setError("Admin access only");
+      setIsSubmitting(false);
+    } catch (loginError) {
       setIsSubmitting(false);
       setError("Invalid admin credentials");
-    }, 450);
+    }
   }
 
   return (
