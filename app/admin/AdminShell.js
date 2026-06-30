@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { ThemeToggle } from "../ThemeControls";
 
 const navigation = [
   { label: "Dashboard", href: "/admin/dashboard" },
@@ -170,6 +171,7 @@ export default function AdminShell({ children }) {
               </h1>
             </div>
             <div className="flex shrink-0 items-center gap-3">
+              <ThemeToggle compact />
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-black text-slate-900">Admin User</p>
                 <p className="text-xs font-semibold text-slate-500">Platform manager</p>
