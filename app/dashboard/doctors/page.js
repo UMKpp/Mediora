@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { api } from "../../lib/api";
 
 const provinceDistricts = {
   "Central Province": ["Kandy", "Matale", "Nuwara Eliya"],
@@ -298,6 +299,9 @@ function ProfileAvatar({ doctor, size = "large" }) {
 }
 
 export default function DoctorsPage() {
+  const [apiDoctors, setApiDoctors] = useState([]);
+  const [isLoadingDoctors, setIsLoadingDoctors] = useState(true);
+  const [doctorError, setDoctorError] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("All Provinces");
   const [selectedDistrict, setSelectedDistrict] = useState("All Districts");
   const [selectedSpecialization, setSelectedSpecialization] = useState("All Specializations");
@@ -313,12 +317,52 @@ export default function DoctorsPage() {
     return ["All Districts", ...provinceDistricts[selectedProvince]];
   }, [selectedProvince]);
   const activeSymptom = selectedSymptom === "All Symptoms" ? "" : selectedSymptom;
+  const doctorList = apiDoctors;
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadDoctors() {
+      setIsLoadingDoctors(true);
+      setDoctorError("");
+
+      try {
+        const records = await api.doctors();
+        if (!active) return;
+        setApiDoctors(
+          records.map((doctor) => ({
+            ...doctor,
+            initials: getInitials(doctor.name),
+            symptoms: Array.isArray(doctor.symptoms)
+              ? doctor.symptoms
+              : String(doctor.symptoms || "")
+                  .split(",")
+                  .map((item) => item.trim().toLowerCase())
+                  .filter(Boolean),
+            nearby: true,
+            online: String(doctor.availability || "").toLowerCase().includes("online"),
+          })),
+        );
+      } catch (error) {
+        if (!active) return;
+        setDoctorError("Unable to load doctors from the backend.");
+        setApiDoctors([]);
+      } finally {
+        if (active) setIsLoadingDoctors(false);
+      }
+    }
+
+    loadDoctors();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredDoctors = useMemo(() => {
     const symptomQuery = activeSymptom;
     const mappedSpecializations = symptomSpecializationMap[symptomQuery] || [];
 
-    return doctors.filter((doctor) => {
+    return doctorList.filter((doctor) => {
       const matchesRecommendedSpecialization =
         mappedSpecializations.length === 0 ||
         selectedSpecialization !== "All Specializations" ||
@@ -366,6 +410,7 @@ export default function DoctorsPage() {
   }, [
     activeFilters,
     activeSymptom,
+    doctorList,
     selectedDistrict,
     selectedProvince,
     selectedSpecialization,
@@ -503,13 +548,29 @@ export default function DoctorsPage() {
         </div>
 
         <p className="mt-4 text-sm font-bold text-slate-500">
-          Showing {filteredDoctors.length} mock doctors across Sri Lanka.
+          Showing {filteredDoctors.length} doctors from Mediora care data.
         </p>
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
         <section>
-          {filteredDoctors.length > 0 ? (
+          {isLoadingDoctors ? (
+            <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3" aria-live="polite">
+              {[1, 2, 3].map((item) => (
+                <div key={item} className="rounded-3xl border border-teal-100 bg-white p-5 shadow-lg shadow-teal-900/5">
+                  <div className="mediora-skeleton h-16 w-16 rounded-3xl" />
+                  <div className="mediora-skeleton mt-5 h-4 w-3/4 rounded-full" />
+                  <div className="mediora-skeleton mt-3 h-3 w-full rounded-full" />
+                  <div className="mediora-skeleton mt-3 h-3 w-2/3 rounded-full" />
+                </div>
+              ))}
+            </div>
+          ) : doctorError ? (
+            <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center shadow-xl shadow-red-900/5">
+              <h2 className="text-2xl font-black text-red-900">No doctors found.</h2>
+              <p className="mt-3 text-base font-semibold text-red-700">{doctorError}</p>
+            </div>
+          ) : filteredDoctors.length > 0 ? (
             <div className="grid items-stretch gap-5 md:grid-cols-2 2xl:grid-cols-3">
               {filteredDoctors.map((doctor) => (
                 <article
