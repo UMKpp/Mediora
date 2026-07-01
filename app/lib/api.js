@@ -25,14 +25,23 @@ export async function apiRequest(path, options = {}) {
     ...options.headers,
   };
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers,
-    body:
-      options.body && typeof options.body !== "string"
-        ? JSON.stringify(options.body)
-        : options.body,
-  });
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      headers,
+      body:
+        options.body && typeof options.body !== "string"
+          ? JSON.stringify(options.body)
+          : options.body,
+    });
+  } catch {
+    throw new ApiError(
+      `Cannot reach the Mediora API at ${API_BASE_URL}. Please start the backend server and try again.`,
+      0
+    );
+  }
 
   const text = await response.text();
   const data = text ? JSON.parse(text) : null;
